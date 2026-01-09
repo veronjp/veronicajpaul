@@ -1,4 +1,3 @@
-# veronicajpaul
 # Hi, I’m Veronica 👋
 
 I’m a self-taught **Data Analyst & Customer Insights professional** with 10+ years of experience in strategy, insurance, and FMCG, now combining **data analytics, psychology, and storytelling** to understand how people actually behave.
