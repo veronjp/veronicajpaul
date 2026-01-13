@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SWLS Test Page (Colourful + Scale Table)</title>
+  <style>
+    :root{
+      --bg1:#0ea5e9;
+      --bg2:#8b5cf6;
+      --bg3:#22c55e;
+      --ink:#0f172a;
+      --muted:#475569;
+      --card:#ffffff;
+      --line:#e2e8f0;
+      --soft:#f8fafc;
+      --accent:#f97316;
+      --accent2:#06b6d4;
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 800px at 10% 10%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(139,92,246,.16), transparent 55%),
+        radial-gradient(900px 700px at 40% 90%, rgba(34,197,94,.14), transparent 55%),
+        #0b1220;
+      padding: 28px 16px 60px;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .hero{
+      border-radius: 18px;
+      padding: 22px 20px;
+      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(139,92,246,.92));
+      color: white;
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-80px -120px auto auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%);
+      transform: rotate(15deg);
+    }
+
+    .hero h1{
+      margin: 0 0 8px;
+      font-size: clamp(22px, 3vw, 30px);
+      letter-spacing: .2px;
+    }
+    .hero p{
+      margin: 0;
+      max-width: 75ch;
+      opacity: .95;
+      line-height: 1.5;
+    }
+
+    .card{
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(226,232,240,.9);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .note{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(249,115,22,.14), rgba(6,182,212,.12));
+      border: 1px solid rgba(249,115,22,.25);
+      color: var(--ink);
+      font-size: .95em;
+    }
+
+    .muted{ color: var(--muted); }
+
+    /* Likert table */
+    .likert{
+  width: 100%;
+  table-layout: fixed;          /* key: makes column widths obey colgroup */
+  border-collapse: collapse;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: white;
+    }
+
+        /* make sure the wrapper can move */
+.likert thead th .nudge-right{
+  display: inline-block;
+  transform: translateX(8px); /* increase/decrease: 4px–12px */
+}
+
+    /* statement column + equal radio columns */
+.col-statement { width: 44%; }
+.col-radio { width: 8%; }       /* 7 x 8% = 56% */
+
+/* scale note only over radio area */
+.scale-head{
+  text-align: center !important;
+  font-weight: 700;
+  padding: 10px 8px;
+  background: linear-gradient(90deg, rgba(14,165,233,.12), rgba(139,92,246,.12));
+  border-bottom: 1px solid var(--line);
+}
+
+/* keep the statement header styled nicely */
+.likert thead th[rowspan]{
+  text-align: left;
+  padding-left: 12px;
+  background: linear-gradient(90deg, rgba(14,165,233,.10), rgba(139,92,246,.10));
+  border-bottom: 1px solid var(--line);
+}
+
+
+    .likert thead th{
+      padding: 10px 8px;
+      font-size: .92em;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(14,165,233,.12), rgba(139,92,246,.12));
+    }
+
+    .likert thead th:first-child{
+      text-align: left;
+      width: 40%;
+      padding-left: 12px;
+    }
+
+    .likert tbody td{
+      border-top: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: center;
+      vertical-align: middle;
+      background: white;
+    }
+
+    .likert tbody tr:nth-child(odd) td{
+      background: var(--soft);
+    }
+
+    .likert tbody td:first-child{
+      text-align: left;
+      padding-left: 12px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .likert small{
+      display:block;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.25;
+    }
+
+    /* Radio styling */
+    .likert input[type="radio"]{
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent2);
+    }
+
+    .legend{
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(226,232,240,.9);
+      background: rgba(255,255,255,.7);
+      font-size: .92em;
+      color: var(--muted);
+    }
+    .legend span{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(6,182,212,.15);
+    }
+    .dot2{
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(249,115,22,.15);
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button{
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 650;
+      letter-spacing: .2px;
+      transition: transform .05s ease, filter .2s ease;
+    }
+    button:active{ transform: translateY(1px); }
+
+    .primary{
+      color: white;
+      background: linear-gradient(135deg, var(--accent), rgba(249,115,22,.75));
+    }
+    .secondary{
+      color: var(--ink);
+      background: linear-gradient(135deg, rgba(6,182,212,.22), rgba(139,92,246,.12));
+      border: 1px solid rgba(6,182,212,.25);
+    }
+
+    .error{
+      display:none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(239,68,68,.35);
+      background: rgba(239,68,68,.08);
+      color: #7f1d1d;
+      font-weight: 600;
+    }
+
+    .results{
+      display:none;
+      margin-top: 16px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(34,197,94,.35);
+      background: linear-gradient(135deg, rgba(34,197,94,.12), rgba(14,165,233,.10));
+    }
+
+    .pill{
+      display:inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(226,232,240,.9);
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 740px){
+      .grid2{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .disclaimer{
+      margin-top: 14px;
+      font-size: .92em;
+      color: var(--muted);
+    }
+
+    /* Make table horizontally scrollable on very small screens */
+    .table-wrap{
+      overflow-x: auto;
+      border-radius: 14px;
+    }
+
+    /* Nudge the "1" header content slightly toward the middle */
+.likert thead tr:nth-child(1) th:nth-child(1){
+  padding-left: 18px !important; /* increase to move right */
+  padding-right: 2px !important;
+}
+
+/* Scale note above table (only over radio columns if you want) */
+.scale-note{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  background: linear-gradient(135deg, rgba(249,115,22,.14), rgba(6,182,212,.12));
+  border: 1px solid rgba(249,115,22,.25);
+}
+
+/* Table header cleanup */
+.statement-head{
+  text-align: left !important;
+  padding-left: 12px !important;
+  vertical-align: middle;
+}
+
+.scale-col{
+  text-align: center;
+  vertical-align: middle;
+}
+
+    
+  </style>
+  
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Satisfaction with Life Scale (SWLS)</h1>
+      <p>
+        Select one option (1–7) for each statement. Your total score will be calculated automatically,
+        along with an interpretation category.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="note">
+        <strong>Scale:</strong> 1 = Strongly disagree | 7 = Strongly agree
+      </div>
+
+      <form id="swlsForm">
+        <div class="table-wrap">
+          <table class="likert" aria-label="SWLS Likert Table">
+            <colgroup>
+  <col class="col-statement" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+  <col class="col-radio" />
+</colgroup>
+            <thead>
+        <thead>
+  <tr>
+    <th class="statement-head">Statement</th>
+    <th class="scale-col">
+      1<br><small>Strongly disagree</small>
+    </th>
+    <th class="scale-col">2</th>
+    <th class="scale-col">3</th>
+    <th class="scale-col">
+      4<br><small>Neither</small>
+    </th>
+    <th class="scale-col">5</th>
+    <th class="scale-col">6</th>
+    <th class="scale-col">
+      7<br><small>Strongly agree</small>
+    </th>
+  </tr>
+</thead>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>1. In most ways my life is close to my ideal.</td>
+                <td><input type="radio" name="q1" value="1" required></td>
+                <td><input type="radio" name="q1" value="2"></td>
+                <td><input type="radio" name="q1" value="3"></td>
+                <td><input type="radio" name="q1" value="4"></td>
+                <td><input type="radio" name="q1" value="5"></td>
+                <td><input type="radio" name="q1" value="6"></td>
+                <td><input type="radio" name="q1" value="7"></td>
+              </tr>
+
+              <tr>
+                <td>2. The conditions of my life are excellent.</td>
+                <td><input type="radio" name="q2" value="1" required></td>
+                <td><input type="radio" name="q2" value="2"></td>
+                <td><input type="radio" name="q2" value="3"></td>
+                <td><input type="radio" name="q2" value="4"></td>
+                <td><input type="radio" name="q2" value="5"></td>
+                <td><input type="radio" name="q2" value="6"></td>
+                <td><input type="radio" name="q2" value="7"></td>
+              </tr>
+
+              <tr>
+                <td>3. I am satisfied with my life.</td>
+                <td><input type="radio" name="q3" value="1" required></td>
+                <td><input type="radio" name="q3" value="2"></td>
+                <td><input type="radio" name="q3" value="3"></td>
+                <td><input type="radio" name="q3" value="4"></td>
+                <td><input type="radio" name="q3" value="5"></td>
+                <td><input type="radio" name="q3" value="6"></td>
+                <td><input type="radio" name="q3" value="7"></td>
+              </tr>
+
+              <tr>
+                <td>4. So far, I have gotten the important things I want in life.</td>
+                <td><input type="radio" name="q4" value="1" required></td>
+                <td><input type="radio" name="q4" value="2"></td>
+                <td><input type="radio" name="q4" value="3"></td>
+                <td><input type="radio" name="q4" value="4"></td>
+                <td><input type="radio" name="q4" value="5"></td>
+                <td><input type="radio" name="q4" value="6"></td>
+                <td><input type="radio" name="q4" value="7"></td>
+              </tr>
+
+              <tr>
+                <td>5. If I could live my life over, I would change almost nothing.</td>
+                <td><input type="radio" name="q5" value="1" required></td>
+                <td><input type="radio" name="q5" value="2"></td>
+                <td><input type="radio" name="q5" value="3"></td>
+                <td><input type="radio" name="q5" value="4"></td>
+                <td><input type="radio" name="q5" value="5"></td>
+                <td><input type="radio" name="q5" value="6"></td>
+                <td><input type="radio" name="q5" value="7"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="actions">
+          <button class="primary" type="submit">Calculate My Score</button>
+          <button class="secondary" type="button" id="resetBtn">Reset</button>
+        </div>
+
+        <div id="error" class="error"></div>
+      </form>
+
+      <div id="results" class="results" role="status" aria-live="polite">
+        <h2 style="margin:0 0 10px;">Your Results</h2>
+
+        <div class="grid2">
+          <div>
+            <p style="margin:0 0 6px;"><strong>Total Score:</strong></p>
+            <div class="pill"><span id="score"></span> / 35</div>
+          </div>
+
+          <div>
+            <p style="margin:0 0 6px;"><strong>Classification:</strong></p>
+            <div class="pill" id="classification"></div>
+          </div>
+        </div>
+
+        <p style="margin:12px 0 0;"><strong>Interpretation:</strong> <span id="interpretation"></span></p>
+      </div>
+
+      <p class="disclaimer">
+        <em>This tool is for educational and self-reflection purposes only. It is not a diagnostic instrument.</em>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function classifySWLS(total) {
+      if (total >= 31) return { label: "Extremely Satisfied", interp: "Very high overall life satisfaction based on your responses." };
+      if (total >= 26) return { label: "Satisfied", interp: "Generally satisfied with life overall based on your responses." };
+      if (total >= 21) return { label: "Slightly Satisfied", interp: "Mild-to-moderate satisfaction with life overall based on your responses." };
+      if (total === 20) return { label: "Neutral", interp: "A neutral overall evaluation of life satisfaction based on your responses." };
+      if (total >= 15) return { label: "Slightly Dissatisfied", interp: "Mild dissatisfaction with life overall based on your responses." };
+      if (total >= 10) return { label: "Dissatisfied", interp: "Notable dissatisfaction with life overall based on your responses." };
+      return { label: "Extremely Dissatisfied", interp: "Very low overall life satisfaction based on your responses." };
+    }
+
+    const form = document.getElementById("swlsForm");
+    const results = document.getElementById("results");
+    const errorBox = document.getElementById("error");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      const values = [];
+      for (let i = 1; i <= 5; i++) {
+        const checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!checked) {
+          errorBox.textContent = "Please answer all 5 statements by selecting one option (1–7) in each row.";
+          errorBox.style.display = "block";
+          results.style.display = "none";
+          return;
+        }
+        values.push(Number(checked.value));
+      }
+
+      const total = values.reduce((a, b) => a + b, 0);
+      const { label, interp } = classifySWLS(total);
+
+      document.getElementById("score").textContent = total;
+      document.getElementById("classification").textContent = label;
+      document.getElementById("interpretation").textContent = interp;
+
+      results.style.display = "block";
+      results.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      form.reset();
+      results.style.display = "none";
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
+
