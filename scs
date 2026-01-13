@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Self-Compassion Scale - Short Form</title>
+
+<style>
+:root{
+  --bg1:#0ea5e9;
+  --bg2:#8b5cf6;
+  --bg3:#22c55e;
+  --ink:#0f172a;
+  --muted:#475569;
+  --card:#ffffff;
+  --line:#e2e8f0;
+  --soft:#f8fafc;
+  --low:#ef4444;
+  --mid:#f59e0b;
+  --high:#22c55e;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--ink);
+}
+
+.container{
+  max-width:900px;
+  margin:40px auto;
+  background:var(--card);
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+h1{margin-top:0}
+p{color:var(--muted)}
+
+.scale{
+  display:grid;
+  grid-template-columns:1fr repeat(5,60px);
+  gap:8px;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.scale-header{
+  font-weight:600;
+  text-align:center;
+  color:var(--muted);
+}
+
+.scale-header small{
+  font-weight:400;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.scale label{
+  text-align:center;
+  font-size:14px;
+}
+
+.question{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  margin-bottom:14px;
+}
+
+.question p{
+  margin:0 0 8px 0;
+  font-weight:500;
+}
+
+button{
+  margin-top:20px;
+  padding:14px 20px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{opacity:.95}
+
+.results{
+  display:none;
+  margin-top:30px;
+  background:var(--soft);
+  padding:20px;
+  border-radius:12px;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  color:white;
+  font-weight:600;
+}
+
+.low{background:var(--low)}
+.mid{background:var(--mid)}
+.high{background:var(--high)}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:16px;
+}
+
+th,td{
+  padding:10px;
+  border:1px solid var(--line);
+  text-align:center;
+}
+
+th{background:#f1f5f9}
+
+.disclaimer{
+  margin-top:30px;
+  font-size:13px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Self-Compassion Scale - Short Form</h1>
+<p>Indicate how often you typically act toward yourself during difficult times.</p>
+
+<div class="scale scale-header">
+  <div></div>
+  <div>1<br><small>Almost never</small></div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5<br><small>Almost always</small></div>
+</div>
+
+<form id="scsForm"></form>
+
+<button onclick="calculate()">Calculate My Score</button>
+
+<div id="results" class="results"></div>
+
+<div class="disclaimer">
+<strong>Disclaimer:</strong> This tool is for educational and self-reflection purposes only. It is not a diagnostic instrument and does not replace professional psychological assessment or therapy.
+</div>
+
+</div>
+
+<script>
+const questions = [
+  "When I fail at something important to me, I become consumed by feelings of inadequacy.",
+  "I try to be understanding and patient towards those aspects of my personality I don’t like.",
+  "When something painful happens I try to take a balanced view of the situation.",
+  "When I’m feeling down, I tend to feel like most other people are probably happier than I am.",
+  "I try to see my failings as part of the human condition.",
+  "When I’m going through a very hard time, I give myself the caring and tenderness I need.",
+  "When something upsets me, I try to keep my emotions in balance.",
+  "When I fail at something that’s important to me, I tend to feel alone in my failure.",
+  "When I’m feeling down, I tend to obsess and fixate on everything that’s wrong.",
+  "When I feel inadequate, I remind myself that these feelings are shared by most people.",
+  "I’m disapproving and judgmental about my own flaws.",
+  "I’m intolerant and impatient toward aspects of my personality I don’t like."
+];
+
+// reverse-scored items (1-based index)
+const reverse = [1,4,8,9,11,12];
+
+const subscales = {
+  "Self-Kindness":[2,6],
+  "Self-Judgment":[11,12],
+  "Common Humanity":[5,10],
+  "Isolation":[4,8],
+  "Mindfulness":[3,7],
+  "Over-Identification":[1,9]
+};
+
+const form = document.getElementById("scsForm");
+
+questions.forEach((q,i)=>{
+  const div = document.createElement("div");
+  div.className="question";
+  let html = `<p>${i+1}. ${q}</p><div class="scale">`;
+  html += `<div></div>`;
+  for(let v=1;v<=5;v++){
+    html += `<label><input type="radio" name="q${i}" value="${v}"/>${v}</label>`;
+  }
+  html += `</div>`;
+  div.innerHTML = html;
+  form.appendChild(div);
+});
+
+function calculate(){
+  let values=[];
+  for(let i=0;i<questions.length;i++){
+    const checked=document.querySelector(`input[name="q${i}"]:checked`);
+    if(!checked){alert("Please answer all questions.");return;}
+    let v=parseInt(checked.value);
+    if(reverse.includes(i+1)) v = 6 - v;
+    values.push(v);
+  }
+
+  let total=0;
+  let rows="";
+
+  for(const [name,items] of Object.entries(subscales)){
+    const mean=(values[items[0]-1]+values[items[1]-1])/2;
+    total+=mean;
+    rows+=`<tr><td>${name}</td><td>${mean.toFixed(2)}</td></tr>`;
+  }
+
+  const overall=(total/6).toFixed(2);
+  let cls="mid",label="Moderate Self-Compassion";
+  if(overall<2.5){cls="low";label="Low Self-Compassion";}
+  if(overall>3.5){cls="high";label="High Self-Compassion";}
+
+  document.getElementById("results").innerHTML=`
+    <h2>Your Results</h2>
+    <p><strong>Total Mean Score:</strong> ${overall}</p>
+    <span class="badge ${cls}">${label}</span>
+
+    <table>
+      <tr><th>Subscale</th><th>Mean Score</th></tr>
+      ${rows}
+    </table>
+
+    <table>
+      <tr><th>Score Range</th><th>Interpretation</th></tr>
+      <tr><td style="background:#fee2e2">1.0 – 2.49</td><td>Low Self-Compassion</td></tr>
+      <tr><td style="background:#fef3c7">2.5 – 3.5</td><td>Moderate Self-Compassion</td></tr>
+      <tr><td style="background:#dcfce7">3.51 – 5.0</td><td>High Self-Compassion</td></tr>
+    </table>
+  `;
+  document.getElementById("results").style.display="block";
+}
+</script>
+</body>
+</html>
