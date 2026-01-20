@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>3 Surveys Check-In: SWLS + Rosenberg + Self-Compassion</title>
+
+  <style>
+    :root{
+      --bg1:#0ea5e9;
+      --bg2:#8b5cf6;
+      --bg3:#22c55e;
+      --ink:#0f172a;
+      --muted:#475569;
+      --card:#ffffff;
+      --line:#e2e8f0;
+      --soft:#f8fafc;
+      --low:#ef4444;
+      --mid:#f59e0b;
+      --high:#22c55e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--ink);
+    }
+    .wrap{max-width:1050px;margin:36px auto;padding:0 16px 48px;}
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 18px 40px rgba(0,0,0,.16);
+      margin-bottom:18px;
+    }
+    h1{margin:0 0 6px}
+    .muted{color:var(--muted)}
+    .topbar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    button{
+      padding:12px 16px;
+      border:0;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--bg2),var(--bg3));
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+    }
+    button:hover{opacity:.95}
+    button.ghost{
+      background:transparent;
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+    button.dark{
+      background:#0f172a;
+    }
+
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      background:var(--soft);border:1px solid var(--line);
+      font-weight:700;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}
+    .done{background:#f0fdf4;border-color:#bbf7d0}
+    .done .dot{background:var(--high)}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+    }
+    th,td{
+      padding:10px;
+      border-bottom:1px solid var(--line);
+      text-align:center;
+      font-size:14px;
+    }
+    th{background:#f1f5f9}
+    td.statement, th.statement{ text-align:left; }
+    tr:last-child td{border-bottom:none}
+
+    th small{
+  display:block;
+  font-weight:600;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+    .section-title{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+    .badge{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      color:#fff;
+      font-weight:900;
+      font-size:13px;
+    }
+    .low{background:var(--low)}
+    .mid{background:var(--mid)}
+    .high{background:var(--high)}
+
+    .error{
+      display:none;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+      color:#9f1239;
+      font-weight:700;
+    }
+
+    .results{
+      display:none;
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--soft);
+    }
+
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+    .mini{
+      background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:left
+    }
+    .bigtag{
+      display:inline-block;
+      padding:8px 12px;border-radius:999px;
+      background:#0ea5e9;color:#fff;font-weight:900
+    }
+    .disclaimer{
+      margin-top:14px;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .hr{margin:18px 0;border:none;border-top:1px solid var(--line)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="card">
+    <div class="topbar">
+      <div>
+        <h1>3 Surveys Check-In</h1>
+        <p class="muted">Complete all three surveys to unlock your combined meaning.</p>
+      </div>
+      <div class="actions">
+        <button class="ghost" type="button" onclick="resetAll()">Reset</button>
+        <button class="dark" type="button" onclick="scrollToResults()">Go to Results</button>
+      </div>
+    </div>
+
+    <div class="pillrow" id="progressRow"></div>
+
+    <p class="disclaimer">
+      <strong>Disclaimer:</strong> Educational/self-reflection only. Not a diagnostic tool and not a substitute for professional advice.
+      If you’re feeling unsafe or in crisis, seek immediate support.
+    </p>
+  </div>
+
+  <!-- SWLS -->
+  <div class="card" id="swlsCard">
+    <div class="section-title">
+      <h2 style="margin:0">1) Satisfaction With Life Scale (SWLS)</h2>
+      <span id="swlsStatus" class="badge mid">Not completed</span>
+    </div>
+
+    <p class="muted" style="margin:0 0 10px">
+  Scale: <strong>1 = Strongly Disagree</strong> … <strong>7 = Strongly Agree</strong>
+</p>
+
+
+    <table>
+      <thead>
+  <tr>
+    <th class="statement">Statement</th>
+    <th>1<br><small>Strongly Disagree</small></th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7<br><small>Strongly Agree</small></th>
+  </tr>
+</thead>
+      <tbody id="swlsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- RSE -->
+  <div class="card" id="rseCard">
+    <div class="section-title">
+      <h2 style="margin:0">2) Rosenberg Self-Esteem Scale</h2>
+      <span id="rseStatus" class="badge mid">Not completed</span>
+    </div>
+
+    <p class="muted" style="margin:0 0 10px">
+      Scale: <strong>Strongly Agree → Strongly Disagree</strong> (scored 3→0 for positive items; reverse-scored items are already encoded)
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="statement">Statement</th>
+          <th>Strongly Agree</th>
+          <th>Agree</th>
+          <th>Disagree</th>
+          <th>Strongly Disagree</th>
+        </tr>
+      </thead>
+      <tbody id="rseBody"></tbody>
+    </table>
+  </div>
+
+  <!-- SCS -->
+  <div class="card" id="scsCard">
+    <div class="section-title">
+      <h2 style="margin:0">3) Self-Compassion Scale (Short Form)</h2>
+      <span id="scsStatus" class="badge mid">Not completed</span>
+    </div>
+
+    <p class="muted" style="margin:0 0 10px">
+      Scale: <strong>1 = Almost never</strong> … <strong>5 = Almost always</strong>
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="statement">Statement</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+        </tr>
+      </thead>
+      <tbody id="scsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ACTION + ERROR -->
+  <div class="card">
+    <div class="actions">
+      <button type="button" onclick="calculateAll()">Calculate All Results</button>
+      <button class="ghost" type="button" onclick="loadLast()">Load last saved</button>
+    </div>
+    <div id="errorBox" class="error"></div>
+
+    <div id="results" class="results" role="status" aria-live="polite">
+      <h2 style="margin:0 0 10px">Your Results</h2>
+
+      <div class="grid2" id="individualResults"></div>
+
+      <hr class="hr"/>
+
+      <h3 style="margin:0 0 8px">Combined Meaning</h3>
+      <div id="combinedBlock"></div>
+
+      <hr class="hr"/>
+
+<h3 style="margin:0 0 8px">Shareable Card</h3>
+<p class="muted" style="margin:0 0 10px">Generate a simple image you can share or save.</p>
+
+<div class="actions">
+  <button type="button" id="generateCardBtn">Generate Card</button>
+  <button class="ghost" type="button" id="downloadCardBtn" disabled>Download PNG</button>
+</div>
+
+
+<div style="margin-top:12px">
+  <img id="shareCardImg" alt="Shareable results card preview" style="max-width:100%; border-radius:14px; border:1px solid #e2e8f0; display:none;">
+</div>
+
+      <p class="disclaimer">
+        <em>Note:</em> These results reflect a moment-in-time snapshot, not a diagnosis or a fixed identity.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =========================
+   DATA (your exact items/scales)
+========================= */
+
+// SWLS: 5 items, 1–7 (as per your table)
+const SWLS_ITEMS = [
+  "In most ways my life is close to my ideal.",
+  "The conditions of my life are excellent.",
+  "I am satisfied with my life.",
+  "So far, I have gotten the important things I want in life.",
+  "If I could live my life over, I would change almost nothing."
+];
+
+// Rosenberg: 10 items with your encoded scoring values.
+// (Positive items: SA=3 A=2 D=1 SD=0; Negative items reversed as you pasted.)
+const RSE_ITEMS = [
+  { text:"I feel that I am a person of worth, at least on an equal plane with others.", vals:[3,2,1,0] },
+  { text:"I feel that I have a number of good qualities.", vals:[3,2,1,0] },
+  { text:"All in all, I am inclined to feel that I am a failure.", vals:[0,1,2,3] },
+  { text:"I am able to do things as well as most other people.", vals:[3,2,1,0] },
+  { text:"I feel I do not have much to be proud of.", vals:[0,1,2,3] },
+  { text:"I take a positive attitude toward myself.", vals:[3,2,1,0] },
+  { text:"On the whole, I am satisfied with myself.", vals:[3,2,1,0] },
+  { text:"I wish I could have more respect for myself.", vals:[0,1,2,3] },
+  { text:"I certainly feel useless at times.", vals:[0,1,2,3] },
+  { text:"At times I think I am no good at all.", vals:[0,1,2,3] }
+];
+
+// SCS-SF: 12 items, 1–5, with reverse scoring for specific items :contentReference[oaicite:1]{index=1}
+const SCS_ITEMS = [
+  "When I fail at something important to me, I become consumed by feelings of inadequacy.",
+  "I try to be understanding and patient towards those aspects of my personality I don’t like.",
+  "When something painful happens I try to take a balanced view of the situation.",
+  "When I’m feeling down, I tend to feel like most other people are probably happier than I am.",
+  "I try to see my failings as part of the human condition.",
+  "When I’m going through a very hard time, I give myself the caring and tenderness I need.",
+  "When something upsets me, I try to keep my emotions in balance.",
+  "When I fail at something that’s important to me, I tend to feel alone in my failure.",
+  "When I’m feeling down, I tend to obsess and fixate on everything that’s wrong.",
+  "When I feel inadequate in some way, I try to remind myself that feelings of inadequacy are shared by most people.",
+  "I’m disapproving and judgmental about my own flaws and inadequacies.",
+  "I’m intolerant and impatient towards those aspects of my personality I don’t like."
+];
+
+// SCS reverse items (1-based): 1,4,8,9,11,12 :contentReference[oaicite:2]{index=2}
+const SCS_REVERSE = new Set([1,4,8,9,11,12]);
+
+// SCS subscales (1-based) :contentReference[oaicite:3]{index=3}
+const SCS_SUBSCALES = {
+  "Self-Kindness": [2,6],
+  "Self-Judgment (rev)": [11,12],
+  "Common Humanity": [5,10],
+  "Isolation (rev)": [4,8],
+  "Mindfulness": [3,7],
+  "Over-Identification (rev)": [1,9]
+};
+
+/* =========================
+   RENDER TABLES
+========================= */
+function render(){
+  // SWLS body
+  const swlsBody = document.getElementById("swlsBody");
+  swlsBody.innerHTML = SWLS_ITEMS.map((t,idx)=>{
+    const q = idx+1;
+    const radios = Array.from({length:7},(_,i)=>{
+      const v=i+1;
+      return `<td><input type="radio" name="swls_q${q}" value="${v}"></td>`;
+    }).join("");
+    return `<tr>
+      <td class="statement">${q}. ${t}</td>
+      ${radios}
+    </tr>`;
+  }).join("");
+
+  // RSE body
+  const rseBody = document.getElementById("rseBody");
+  rseBody.innerHTML = RSE_ITEMS.map((item,idx)=>{
+    const q = idx+1;
+    return `<tr>
+      <td class="statement">${q}. ${item.text}</td>
+      <td><input type="radio" name="rse_q${q}" value="${item.vals[0]}"></td>
+      <td><input type="radio" name="rse_q${q}" value="${item.vals[1]}"></td>
+      <td><input type="radio" name="rse_q${q}" value="${item.vals[2]}"></td>
+      <td><input type="radio" name="rse_q${q}" value="${item.vals[3]}"></td>
+    </tr>`;
+  }).join("");
+
+  // SCS body
+  const scsBody = document.getElementById("scsBody");
+  scsBody.innerHTML = SCS_ITEMS.map((t,idx)=>{
+    const q = idx+1;
+    const radios = Array.from({length:5},(_,i)=>{
+      const v=i+1;
+      return `<td><input type="radio" name="scs_q${q}" value="${v}"></td>`;
+    }).join("");
+    return `<tr>
+      <td class="statement">${q}. ${t}</td>
+      ${radios}
+    </tr>`;
+  }).join("");
+
+  updateProgress();
+}
+render();
+
+/* =========================
+   VALIDATION + GET ANSWERS
+========================= */
+function checkedValue(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? Number(el.value) : null;
+}
+
+function requireAllAnswered(prefix, count){
+  for(let i=1;i<=count;i++){
+    if(checkedValue(`${prefix}_q${i}`) === null) return false;
+  }
+  return true;
+}
+
+function getAnswers(prefix, count){
+  const arr=[];
+  for(let i=1;i<=count;i++) arr.push(checkedValue(`${prefix}_q${i}`));
+  return arr;
+}
+
+/* =========================
+   SWLS SCORING (your exact bands)
+========================= */
+function classifySWLS(total) {
+  if (total >= 31) return { label: "Extremely Satisfied", interp: "Very high overall life satisfaction based on your responses." };
+  if (total >= 26) return { label: "Satisfied", interp: "Generally satisfied with life overall based on your responses." };
+  if (total >= 21) return { label: "Slightly Satisfied", interp: "Mild-to-moderate satisfaction with life overall based on your responses." };
+  if (total === 20) return { label: "Neutral", interp: "A neutral overall evaluation of life satisfaction based on your responses." };
+  if (total >= 15) return { label: "Slightly Dissatisfied", interp: "Mild dissatisfaction with life overall based on your responses." };
+  if (total >= 10) return { label: "Dissatisfied", interp: "Notable dissatisfaction with life overall based on your responses." };
+  return { label: "Extremely Dissatisfied", interp: "Very low overall life satisfaction based on your responses." };
+}
+
+function swlsLevel3(label){
+  // Map SWLS bands -> low/mid/high for combined meaning
+  const low = ["Extremely Dissatisfied","Dissatisfied","Slightly Dissatisfied"];
+  const high = ["Satisfied","Extremely Satisfied"];
+  if(high.includes(label)) return "high";
+  if(low.includes(label)) return "low";
+  return "mid"; // Neutral + Slightly Satisfied
+}
+
+/* =========================
+   RSE SCORING (your exact bands)
+========================= */
+function rseBand(total){
+  if(total < 15) return "Low self-esteem";
+  if(total < 25) return "Normal self-esteem";
+  return "High self-esteem";
+}
+function rseLevel3(band){
+  if(band.startsWith("Low")) return "low";
+  if(band.startsWith("High")) return "high";
+  return "mid";
+}
+
+/* =========================
+   SCS-SF SCORING (per guide) :contentReference[oaicite:4]{index=4}
+   - reverse score items 1,4,8,9,11,12
+   - subscale means (2 items each)
+   - total mean = mean of 6 subscale means
+========================= */
+function reverse1to5(v){ return 6 - v; }
+
+function scsCompute(vals1to5){
+  // vals1to5 is length 12, in item order 1..12
+  const scored = vals1to5.map((v,idx)=>{
+    const item = idx+1;
+    return SCS_REVERSE.has(item) ? reverse1to5(v) : v;
+  });
+
+  const subMeans = {};
+  let subSum = 0;
+  for(const [name,items] of Object.entries(SCS_SUBSCALES)){
+    const m = (scored[items[0]-1] + scored[items[1]-1]) / 2;
+    subMeans[name] = m;
+    subSum += m;
+  }
+  const totalMean = subSum / 6;
+
+  let band = "Moderate Self-Compassion";
+  let level = "mid";
+  if(totalMean < 2.5){ band = "Low Self-Compassion"; level="low"; }
+  else if(totalMean > 3.5){ band = "High Self-Compassion"; level="high"; }
+
+  return { totalMean, band, level, subMeans };
+}
+
+/* =========================
+   COMBINED MEANING (decision tree)
+========================= */
+function combinedMeaning(w,e,c){
+  // w,e,c in {low,mid,high}
+
+  if(w==="low" && c==="low"){
+    return {
+      title:"In pain + hard on yourself",
+      tag:"High pressure, low kindness",
+      bullets:[
+        "Things may feel heavy right now — and self-criticism might be amplifying the load.",
+        "Your most powerful next step is support, not self-punishment.",
+        "Pick one small act of kindness today (rest, ask for help, or soften your inner voice)."
+      ],
+      text:"Right now, things may feel heavy — and your inner voice might be making it harder. The most powerful next step isn’t fixing everything; it’s learning to support yourself while you carry it."
+    };
+  }
+
+  if(w==="low" && c!=="low" && e!=="low"){
+    return {
+      title:"Hard season, strong inner resources",
+      tag:"Struggling, but resilient",
+      bullets:[
+        "Life may be tough, but you still have internal strengths to lean on.",
+        "Keep steps small and kind — consistency beats intensity.",
+        "Choose one stabilizer: sleep, movement, food, or connection."
+      ],
+      text:"Life may be difficult, but you still have self-respect and emotional tools available. Keep steps small and kind — consistency beats intensity here."
+    };
+  }
+
+  if(w==="mid" && c==="low"){
+    return {
+      title:"Functioning… but self-critical",
+      tag:"Coping, but at a cost",
+      bullets:[
+        "You’re getting through — but it may be fueled by pressure instead of support.",
+        "Try supportive discipline: clear standards delivered with kindness.",
+        "Swap one harsh thought for a helpful one: “What would I advise a friend?”"
+      ],
+      text:"You’re getting through, but it may come with a lot of internal pressure. The upgrade is supportive discipline: clear standards, delivered with kindness."
+    };
+  }
+
+  if(w==="high" && c==="high"){
+    return {
+      title:"Thriving with steadiness",
+      tag:"Strong + supported from within",
+      bullets:[
+        "You’re doing well — and you’re meeting life with self-support, not self-attack.",
+        "This is a powerful foundation for brave decisions and long-term growth.",
+        "Protect what’s working: routines, boundaries, and the people who steady you."
+      ],
+      text:"You’re doing well — and doing it with a compassionate inner relationship. This is a powerful foundation for brave decisions and long-term growth."
+    };
+  }
+
+  if(e==="low" && c==="high"){
+    return {
+      title:"Kind heart, shaky self-belief",
+      tag:"Gentle, but doubting",
+      bullets:[
+        "You have warmth toward yourself, but confidence may lag behind.",
+        "Build self-trust through tiny promises kept (daily, not dramatic).",
+        "Track evidence: one small win a day for 7 days."
+      ],
+      text:"You have warmth toward yourself, but confidence may lag behind. Build evidence: small promises kept, repeated, until self-trust catches up."
+    };
+  }
+
+  return {
+    title:"A mixed but workable snapshot",
+    tag:"In progress, not broken",
+    bullets:[
+      "This reflects a normal human mix — strengths in some areas, edges in others.",
+      "Use this as information, not a verdict about who you are.",
+      "Choose one gentle focus and check in again in a few weeks."
+    ],
+    text:"This looks like a normal human blend — strengths in some areas, edges in others. Use it as information, not a verdict. Pick one gentle focus and retest in a few weeks."
+  };
+}
+
+
+/* =========================
+   UI: PROGRESS PILLS
+========================= */
+function updateProgress(){
+  const swlsDone = requireAllAnswered("swls", 5);
+  const rseDone  = requireAllAnswered("rse", 10);
+  const scsDone  = requireAllAnswered("scs", 12);
+
+  const row = document.getElementById("progressRow");
+  row.innerHTML = `
+    <div class="pill ${swlsDone?"done":""}"><span class="dot"></span>SWLS</div>
+    <div class="pill ${rseDone?"done":""}"><span class="dot"></span>Rosenberg</div>
+    <div class="pill ${scsDone?"done":""}"><span class="dot"></span>Self-Compassion</div>
+  `;
+
+  document.getElementById("swlsStatus").className = `badge ${swlsDone?"high":"mid"}`;
+  document.getElementById("swlsStatus").textContent = swlsDone ? "Completed" : "Not completed";
+
+  document.getElementById("rseStatus").className = `badge ${rseDone?"high":"mid"}`;
+  document.getElementById("rseStatus").textContent = rseDone ? "Completed" : "Not completed";
+
+  document.getElementById("scsStatus").className = `badge ${scsDone?"high":"mid"}`;
+  document.getElementById("scsStatus").textContent = scsDone ? "Completed" : "Not completed";
+}
+
+document.addEventListener("change", (e)=>{
+  if(e.target && e.target.matches('input[type="radio"]')) updateProgress();
+});
+
+/* =========================
+   STORAGE
+========================= */
+function saveAll(payload){
+  localStorage.setItem("surveys_all", JSON.stringify({
+    ...payload,
+    savedAt: new Date().toISOString()
+  }));
+}
+
+function loadLast(){
+  const raw = localStorage.getItem("surveys_all");
+  if(!raw){
+    showError("No saved results found yet. Complete all 3 surveys, then click Calculate.");
+    return;
+  }
+  const data = JSON.parse(raw);
+  renderResults(data, true);
+}
+
+
+
+/* =========================
+   CALCULATE ALL
+========================= */
+function calculateAll(){
+  const err = document.getElementById("errorBox");
+  err.style.display = "none";
+  err.textContent = "";
+
+  const swlsOK = requireAllAnswered("swls", 5);
+  const rseOK  = requireAllAnswered("rse", 10);
+  const scsOK  = requireAllAnswered("scs", 12);
+
+  if(!swlsOK || !rseOK || !scsOK){
+    const missing = [];
+    if(!swlsOK) missing.push("SWLS (5 items)");
+    if(!rseOK)  missing.push("Rosenberg (10 items)");
+    if(!scsOK)  missing.push("Self-Compassion (12 items)");
+    showError("Please complete: " + missing.join(", ") + ".");
+    return;
+  }
+
+  // 1) SWLS
+  const swlsVals = getAnswers("swls", 5);
+  const swlsTotal = swlsVals.reduce((a,b)=>a+b,0);
+  const swlsC = classifySWLS(swlsTotal);
+  const swlsL3 = swlsLevel3(swlsC.label);
+
+  // 2) RSE
+  const rseVals = getAnswers("rse", 10);
+  const rseTotal = rseVals.reduce((a,b)=>a+b,0);
+  const rseB = rseBand(rseTotal);
+  const rseL3 = rseLevel3(rseB);
+
+  // 3) SCS
+  const scsVals = getAnswers("scs", 12);
+  const scs = scsCompute(scsVals); // { totalMean, band, level, subMeans }
+
+  // Combined
+  const combo = combinedMeaning(swlsL3, rseL3, scs.level);
+
+  const payload = {
+    swls: { total: swlsTotal, label: swlsC.label, interp: swlsC.interp, level3: swlsL3 },
+    rse:  { total: rseTotal, band: rseB, level3: rseL3 },
+    scs:  { mean: Number(scs.totalMean.toFixed(2)), band: scs.band, level3: scs.level, subMeans: scs.subMeans },
+    combined: combo
+  };
+
+  saveAll(payload);
+  renderResults(payload, false);
+}
+
+function renderResults(data, fromStorage){
+  const res = document.getElementById("results");
+  res.style.display = "block";
+
+  const ind = document.getElementById("individualResults");
+
+  ind.innerHTML = `
+    <div class="mini">
+      <div class="muted" style="font-weight:900;margin-bottom:6px">SWLS</div>
+      <div><strong>Total:</strong> ${data.swls.total} / 35</div>
+      <div><strong>Classification:</strong> ${data.swls.label}</div>
+      <div class="muted" style="margin-top:6px">${data.swls.interp}</div>
+    </div>
+
+    <div class="mini">
+      <div class="muted" style="font-weight:900;margin-bottom:6px">Rosenberg</div>
+      <div><strong>Total:</strong> ${data.rse.total} / 30</div>
+      <div><strong>Band:</strong> ${data.rse.band}</div>
+    </div>
+
+    <div class="mini">
+      <div class="muted" style="font-weight:900;margin-bottom:6px">Self-Compassion (SCS-SF)</div>
+      <div><strong>Total Mean:</strong> ${data.scs.mean} (1–5)</div>
+      <div><strong>Band:</strong> ${data.scs.band}</div>
+      <details style="margin-top:8px">
+        <summary style="cursor:pointer;font-weight:800">Subscale means</summary>
+        <div class="muted" style="margin-top:6px;font-size:13px">
+          ${Object.entries(data.scs.subMeans).map(([k,v])=>`${k}: <strong>${Number(v).toFixed(2)}</strong>`).join("<br>")}
+        </div>
+      </details>
+    </div>
+  `;
+
+  document.getElementById("combinedBlock").innerHTML = `
+    <p><span class="bigtag">${data.combined.tag}</span></p>
+    <p style="margin:0 0 8px"><strong>${data.combined.title}</strong></p>
+    <p class="muted" style="margin:0">${data.combined.text}</p>
+    <p class="muted" style="margin-top:10px;font-size:13px">
+      Profile: wellbeing=<strong>${data.swls.level3}</strong>, esteem=<strong>${data.rse.level3}</strong>, compassion=<strong>${data.scs.level3}</strong>
+      ${fromStorage ? ` • (loaded from saved results)` : ``}
+    </p>
+  `;
+
+  scrollToResults();
+}
+
+function showError(msg){
+  const err = document.getElementById("errorBox");
+  err.textContent = msg;
+  err.style.display = "block";
+}
+
+/* =========================
+   RESET / SCROLL
+========================= */
+function resetAll(){
+  // clear selections
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+
+  // hide outputs
+  document.getElementById("results").style.display = "none";
+  const err = document.getElementById("errorBox");
+  err.style.display = "none";
+  err.textContent = "";
+
+  updateProgress();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function scrollToResults(){
+  document.getElementById("results").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+let shareCardBlob = null;
+
+function setupShareCardButtons(){
+  const genBtn = document.getElementById("generateCardBtn");
+  const dlBtn  = document.getElementById("downloadCardBtn");
+
+  if(!genBtn || !dlBtn){
+    // If you don't see this, the share card HTML isn't on the page yet.
+    console.warn("Share card buttons not found. Check your HTML ids.");
+    return;
+  }
+
+  genBtn.addEventListener("click", generateShareCard);
+  dlBtn.addEventListener("click", downloadShareCard);
+}
+
+function generateShareCard(){
+  const raw = localStorage.getItem("surveys_all");
+  if(!raw){
+    if (typeof showError === "function") showError("No saved results found yet. Complete all 3 surveys and click Calculate first.");
+    else alert("No saved results found yet. Complete all 3 surveys and click Calculate first.");
+    return;
+  }
+
+  const data = JSON.parse(raw);
+
+  const BRAND = "Inner Wellbeing Index";
+  const SUB   = "Self Assessment Check-In";
+  const DATE  = new Date(data.savedAt || Date.now()).toLocaleDateString();
+
+  const swls = `${data.swls.total}/35 • ${data.swls.label}`;
+  const rse  = `${data.rse.total}/30 • ${data.rse.band}`;
+  const scs  = `${data.scs.mean} • ${data.scs.band}`;
+
+  const tag   = data.combined.tag;
+  const title = data.combined.title;
+  const summary = data.combined.text;
+
+  const W = 1080, H = 1350;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0, "#0284c7");
+  grad.addColorStop(0.5, "#8b5cf6");
+  grad.addColorStop(1, "#22c55e");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  // Inner white card
+  const pad = 70;
+  const contentX = pad + 72;
+  const contentW = W - pad*2 - 144;
+
+  roundRect(ctx, pad, pad, W - pad*2, H - pad*2, 48);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+
+  // Header
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#0f172a";
+  text(ctx, BRAND, contentX, pad + 92, 46, 900);
+
+  ctx.fillStyle = "#475569";
+  text(ctx, `${SUB} • ${DATE}`, contentX, pad + 138, 26, 600);
+
+  // Divider
+  ctx.strokeStyle = "#e2e8f0";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(contentX, pad + 168);
+  ctx.lineTo(contentX + contentW, pad + 168);
+  ctx.stroke();
+
+  // ---- SNAPSHOT (FIRST) ----
+  let y = pad + 235;
+
+  ctx.fillStyle = "#0f172a";
+  text(ctx, "Your snapshot", contentX, y, 34, 900);
+
+  y += 62;
+  y = keyLine(ctx, "SWLS", swls, contentX, y);
+  y = keyLine(ctx, "Rosenberg", rse, contentX, y);
+  y = keyLine(ctx, "Self-Compassion", scs, contentX, y);
+
+  // Divider 2
+  y += 18;
+  ctx.strokeStyle = "#e2e8f0";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(contentX, y);
+  ctx.lineTo(contentX + contentW, y);
+  ctx.stroke();
+
+  // ---- COMBINED INSIGHT (SECOND) ----
+  // ---- COMBINED INSIGHT ----
+y += 40;
+pill(ctx, contentX, y, tag, "#0284c7");
+y += 60; // advance by pill height
+
+// Title
+y += 36; // tighter gap after pill
+ctx.fillStyle = "#0f172a";
+text(ctx, title, contentX, y, 40, 900);
+
+// Bullet points
+y += 44;
+ctx.fillStyle = "#475569";
+
+
+const bullets = (data.combined.bullets && data.combined.bullets.length)
+  ? data.combined.bullets
+  : [
+      "This reflects a normal human mix — strengths in some areas, edges in others.",
+      "Use this as information, not a verdict about who you are.",
+      "Choose one gentle focus and check in again in a few weeks."
+    ];
+
+y = drawBullets(ctx, bullets, contentX, y, contentW, 26, 1.6);
+
+  // Footer (optical padding)
+  ctx.fillStyle = "#94a3b8";
+  text(ctx, "Educational/self-reflection only — not diagnostic.", contentX, H - pad - 52, 22, 600);
+
+  // Export as blob
+  canvas.toBlob((blob)=>{
+    if(!blob){
+      alert("Could not generate image. Try again.");
+      return;
+    }
+    shareCardBlob = blob;
+
+    const img = document.getElementById("shareCardImg");
+    img.src = URL.createObjectURL(blob);
+    img.style.display = "block";
+
+    document.getElementById("downloadCardBtn").disabled = false;
+  }, "image/png");
+}
+
+function downloadShareCard(){
+  if(!shareCardBlob) return;
+
+  const url = URL.createObjectURL(shareCardBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "wellbeing-checkin-card.png";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  // Clean up
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+
+/* ===== drawing helpers ===== */
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+
+function text(ctx, t, x, y, size, weight){
+  ctx.font = `${weight} ${size}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  ctx.fillText(t, x, y);
+}
+
+function keyLine(ctx, k, v, x, y){
+  ctx.fillStyle = "#0f172a";
+  ctx.font = `800 28px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  ctx.fillText(k + ":", x, y);
+
+  ctx.fillStyle = "#475569";
+  ctx.font = `600 28px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  ctx.fillText(v, x + 260, y);
+
+  return y + 46;
+}
+
+function pill(ctx, x, y, t, bg){
+  // pill style
+  const fontSize = 26;
+  const fontWeight = 800;
+  const paddingX = 22;
+  const h = 44;
+  const radius = 22;
+
+  // measure text
+  ctx.font = `${fontWeight} ${fontSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  const w = ctx.measureText(t).width + paddingX * 2;
+
+  // background
+  ctx.fillStyle = bg;
+  roundRect(ctx, x, y, w, h, radius);
+  ctx.fill();
+
+  // text (baseline inside pill)
+  ctx.fillStyle = "#ffffff";
+  ctx.textBaseline = "alphabetic"; // keep normal
+  ctx.fillText(t, x + paddingX, y + 30); // 30 centers well for 26px font in 44px pill
+}
+
+
+function wrapped(ctx, textStr, x, y, maxW, fontSize, lhMult){
+  ctx.font = `600 ${fontSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  const words = textStr.split(" ");
+  let line = "";
+  const lh = fontSize * lhMult;
+
+  for(let i=0;i<words.length;i++){
+    const test = line + words[i] + " ";
+    if(ctx.measureText(test).width > maxW && i > 0){
+      ctx.fillText(line.trim(), x, y);
+      line = words[i] + " ";
+      y += lh;
+    } else {
+      line = test;
+    }
+  }
+  if(line.trim()){
+    ctx.fillText(line.trim(), x, y);
+    y += lh;
+  }
+  return y;
+}
+
+function drawBullets(ctx, bullets, x, y, maxW, fontSize, lineHeightMult){
+  ctx.font = `600 ${fontSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+  const lh = fontSize * lineHeightMult;
+  const bulletGap = 18;
+
+  bullets.forEach(text => {
+    // bullet dot
+    ctx.fillText("•", x, y);
+
+    // wrapped bullet text
+    y = wrapped(ctx, text, x + bulletGap, y, maxW - bulletGap, fontSize, lineHeightMult);
+    y += 6;
+  });
+
+  return y;
+}
+
+
+// IMPORTANT: run after the page loads
+document.addEventListener("DOMContentLoaded", setupShareCardButtons);
+
+</script>
+
+</body>
+</html>
