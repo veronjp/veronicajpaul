@@ -1,6 +1,13 @@
-<header>
-  <nav>
-    <!-- The relative_url filter adds the baseurl, so this link works under /veronicajpaul/. -->
-    <a href="{{ '/' | relative_url }}">Home</a>
+<header class="site-header">
+  <a class="site-name" href="{{ '/' | relative_url }}">Veronica J. Paul</a>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul class="site-nav__list">
+      <li><a class="site-nav__link" href="{{ '/' | relative_url }}">Home</a></li>
+      <li><a class="site-nav__link" href="{{ '/experiments/' | relative_url }}">Experiments</a></li>
+      <li><a class="site-nav__link" href="{{ '/research/' | relative_url }}">Research</a></li>
+      <li><a class="site-nav__link" href="{{ '/writing/' | relative_url }}">Writing</a></li>
+      <li><a class="site-nav__link" href="https://github.com/veronjp" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+    </ul>
   </nav>
 </header>
