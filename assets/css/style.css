@@ -1,0 +1,202 @@
+/* ==========================================================================
+   1. BRAND TOKENS
+   ========================================================================== */
+
+:root {
+  /* Colours */
+  --color-orange: #D2541C;       /* primary: main headings, personality */
+  --color-burnt: #9C3F14;        /* secondary: supporting headings */
+  --color-green: #1F6B4A;        /* interaction: links, focus */
+  --color-ink: #1C1A16;          /* body text */
+  --color-grey: #6B6B6B;         /* quiet metadata */
+  --color-paper: #FBF7EE;        /* page background */
+
+  /* Fonts (fallbacks only for now; loading is handled separately) */
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Widths */
+  --width-text: 40rem;
+  --width-wide: 64rem;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+
+  /* Side padding of the page: small on phones, larger from 34rem up */
+  --page-pad: 1.25rem;
+}
+
+@media (min-width: 34rem) {
+  :root {
+    --page-pad: 2rem;
+  }
+}
+
+
+/* ==========================================================================
+   2. BASE RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* ==========================================================================
+   3. DOCUMENT
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  line-height: 1.65;
+}
+
+
+/* ==========================================================================
+   4. HEADINGS AND TEXT
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 400;              /* Young Serif has a single weight */
+  line-height: 1.15;
+  margin-block: var(--space-7) var(--space-4);
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  color: var(--color-orange);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-burnt);
+}
+
+h1 {
+  font-size: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+}
+
+h4,
+h5,
+h6 {
+  font-size: 1.125rem;
+}
+
+p,
+ul,
+ol {
+  margin-block: 0 var(--space-4);
+}
+
+small {
+  color: var(--color-grey);
+}
+
+
+/* ==========================================================================
+   5. LINKS
+   ========================================================================== */
+
+a {
+  color: var(--color-green);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 3px;
+}
+
+
+/* ==========================================================================
+   6. PAGE STRUCTURE
+   ========================================================================== */
+
+/* Header, main and footer share the same centred column. */
+body > header,
+body > main,
+body > footer {
+  width: min(100% - (2 * var(--page-pad)), var(--width-text));
+  margin-inline: auto;
+}
+
+body > header {
+  padding-block: var(--space-5) var(--space-4);
+}
+
+body > main {
+  padding-block: var(--space-7);
+}
+
+body > footer {
+  padding-block: var(--space-7) var(--space-6);
+  color: var(--color-grey);
+  font-size: 0.875rem;
+}
+
+body > footer p {
+  margin: 0;
+}
+
+@media (min-width: 34rem) {
+  body > header {
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  body > main {
+    padding-block: var(--space-8);
+  }
+}
