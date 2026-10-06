@@ -1,3 +1,8 @@
 title: "Veronica J. Paul"
 url: "https://veronjp.github.io"
 baseurl: "/veronicajpaul"
+
+collections:
+  experiments:
+    output: true
+    permalink: /experiments/:name/
