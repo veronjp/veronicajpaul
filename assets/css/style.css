@@ -388,3 +388,89 @@ body > footer p {
     font-size: 1.125rem;
   }
 }
+
+
+/* ==========================================================================
+   10. EXPERIMENTS PAGE: EARLIER EXPERIMENT BUILDS
+   ========================================================================== */
+
+/* Deliberately quieter than the current experiments above it: smaller
+   heading, grey introduction, plain numbered list, thin rules.
+   The rule colour is a local variable, like in Selected Work. */
+.legacy-builds {
+  --legacy-rule: rgba(28, 26, 22, 0.16);
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--legacy-rule);
+}
+
+/* Burnt orange and small, so it reads as secondary. */
+.legacy-builds__heading {
+  margin: 0 0 var(--space-3);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--color-burnt);
+}
+
+.legacy-builds__intro {
+  max-width: 34em;
+  margin: 0 0 var(--space-5);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-grey);
+}
+
+/* A CSS counter numbers the rows (01, 02, ...) without extra HTML.
+   The number is a small DM Mono label in grey. */
+.legacy-builds__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: legacy-build;
+}
+
+.legacy-builds__item {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--space-3);
+  align-items: baseline;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--legacy-rule);
+  counter-increment: legacy-build;
+}
+
+.legacy-builds__item:last-child {
+  border-bottom: 0;
+}
+
+.legacy-builds__item::before {
+  content: counter(legacy-build, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+/* Green, slightly smaller than body text, with a soft underline that
+   becomes solid on hover. minmax(0, 1fr) above lets long titles wrap. */
+.legacy-builds__link {
+  font-size: 1rem;
+  line-height: 1.4;
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.legacy-builds__link:hover {
+  text-decoration-color: currentColor;
+}
+
+@media (min-width: 34rem) {
+  .legacy-builds {
+    margin-top: var(--space-9);
+    padding-top: var(--space-6);
+  }
+
+  .legacy-builds__item {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    padding-block: var(--space-4);
+  }
+}
