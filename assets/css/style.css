@@ -302,3 +302,89 @@ body > footer p {
     padding-block: var(--space-8) var(--space-9);
   }
 }
+
+
+/* ==========================================================================
+   9. HOMEPAGE: SELECTED WORK
+   ========================================================================== */
+
+/* A thin rule marks the start of the section. The rule colour is a
+   local variable so it does not change the global brand tokens. */
+.selected-work {
+  --selected-work-rule: rgba(28, 26, 22, 0.16);
+  padding-block: var(--space-6) var(--space-7);
+  border-top: 1px solid var(--selected-work-rule);
+}
+
+/* Smaller than the project title on purpose: it labels the section,
+   the project is the main event. */
+.selected-work__heading {
+  margin: 0 0 var(--space-6);
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  line-height: 1.2;
+}
+
+.project {
+  margin: 0;
+}
+
+/* Small technical line above the title: type, separator, status. */
+.project__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* A small orange dot marks the status. */
+.project__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.project__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+/* The strongest element in this section. Ink keeps it readable and
+   leaves orange for the section heading above it. */
+.project__title {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.75rem, 1.3rem + 2.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.project__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 34rem) {
+  .selected-work {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .selected-work__heading {
+    margin-bottom: var(--space-7);
+  }
+
+  .project__description {
+    font-size: 1.125rem;
+  }
+}
