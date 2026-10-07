@@ -79,6 +79,19 @@ body {
   font-family: var(--font-body);
   font-size: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
   line-height: 1.65;
+  /* A word or URL that is too long for its line breaks instead of
+     pushing the page wider than the screen. Everything inherits this. */
+  overflow-wrap: break-word;
+}
+
+/* Long code scrolls inside its own box, never the whole page. */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+code {
+  overflow-wrap: anywhere;
 }
 
 
@@ -177,8 +190,10 @@ body > header {
   padding-block: var(--space-5) var(--space-4);
 }
 
+/* Phones: less space above the content, because the sections inside
+   already add their own. Desktop spacing is set in the media query. */
 body > main {
-  padding-block: var(--space-7);
+  padding-block: var(--space-5) var(--space-7);
 }
 
 body > footer {
@@ -231,11 +246,13 @@ body > footer p {
   text-underline-offset: 0.2em;
 }
 
-/* The list is only a list for meaning. Visually it is a row of links. */
+/* The list is only a list for meaning. Visually it is a row of links.
+   The gap between links shrinks on narrow screens (clamp) so more
+   links fit on each line before the row wraps. */
 .site-nav__list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--space-5);
+  gap: 0 clamp(var(--space-3), 4vw, var(--space-5));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -261,8 +278,10 @@ body > footer p {
    8. HOMEPAGE INTRODUCTION
    ========================================================================== */
 
+/* Phones: a shorter gap above and below the statement.
+   Desktop spacing is set in the media query. */
 .intro {
-  padding-block: var(--space-7) var(--space-8);
+  padding-block: var(--space-5) var(--space-7);
 }
 
 /* Small technical label with a little orange square in front of it. */
@@ -396,10 +415,11 @@ body > footer p {
 
 /* Deliberately quieter than the current experiments above it: smaller
    heading, grey introduction, plain numbered list, thin rules.
-   The rule colour is a local variable, like in Selected Work. */
+   The rule colour is a local variable, like in Selected Work.
+   Phones get a smaller gap above the section (desktop is set below). */
 .legacy-builds {
   --legacy-rule: rgba(28, 26, 22, 0.16);
-  margin-top: var(--space-8);
+  margin-top: var(--space-7);
   padding-top: var(--space-5);
   border-top: 1px solid var(--legacy-rule);
 }
@@ -839,7 +859,8 @@ body > footer p {
 }
 
 /* No box: only a line underneath, like writing on a ruled page.
-   font-size stays above 16px so phones do not zoom in on focus. */
+   font-size stays above 16px so phones do not zoom in on focus.
+   width: 100% with border-box sizing keeps fields inside the screen. */
 .contact-form__input {
   display: block;
   width: 100%;
@@ -898,13 +919,14 @@ body > footer p {
   outline-offset: 3px;
 }
 
-/* A centred row of links that wraps onto more lines when needed. */
+/* A centred row of links that wraps onto more lines when needed.
+   Phones get a smaller gap above it (desktop is set below). */
 .social-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-1) var(--space-5);
-  margin: var(--space-8) 0 0;
+  margin: var(--space-7) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -938,5 +960,144 @@ body > footer p {
 
   .contact-form__input {
     font-size: 1.25rem;
+  }
+
+  .social-links {
+    margin-top: var(--space-8);
+  }
+}
+
+
+/* ==========================================================================
+   15. EXPERIMENTS PAGE: CURRENT EXPERIMENTS LIST
+   ========================================================================== */
+
+/* ADDED IN THE RESPONSIVE PASS: these classes exist in
+   experiments/index.html but had no styles yet, so the list showed
+   browser defaults (bullets and an indent). This mirrors the Research
+   list in section 12 so the two pages match. */
+.experiment-list {
+  --experiment-rule: rgba(28, 26, 22, 0.16);
+}
+
+.experiment-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experiment-list__item {
+  padding-block: var(--space-6);
+}
+
+.experiment-list__item + .experiment-list__item {
+  border-top: 1px solid var(--experiment-rule);
+}
+
+.experiment-list__item:first-child {
+  padding-top: 0;
+}
+
+.experiment {
+  margin: 0;
+}
+
+.experiment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.experiment__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.experiment__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+.experiment__title {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.125rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.experiment__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.experiment__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.experiment__summary {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.experiment-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--experiment-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.experiment-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+@media (min-width: 34rem) {
+  .experiment-list__item {
+    padding-block: var(--space-7);
+  }
+
+  .experiment__summary {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   16. TOUCH SCREENS
+   ========================================================================== */
+
+/* Phones and tablets: links in the header and the social row get a
+   tap area of at least 44px tall. Mouse users keep the compact look.
+   One query covers every touch device, whatever its screen width. */
+@media (pointer: coarse) {
+  .site-name,
+  .site-nav__link,
+  .social-links__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
   }
 }
