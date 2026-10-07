@@ -11,7 +11,13 @@
   --color-grey: #6B6B6B;         /* quiet metadata */
   --color-paper: #FBF7EE;        /* page background */
 
-  /* Fonts (fallbacks only for now; loading is handled separately) */
+  /* CONTRAST NOTES (approximate ratios on the paper background):
+     ink 16:1, green 6:1, grey 5:1, burnt orange 6:1, orange 3.9:1.
+     Orange is below the 4.5:1 needed for small text. It is only used for
+     large text (24px and up), where 3:1 is enough, and for decoration.
+     Do not use orange for small text. Use burnt orange or ink instead. */
+
+  /* Fonts (loaded in the layout; fallbacks keep text readable meanwhile) */
   --font-display: "Young Serif", Georgia, "Times New Roman", serif;
   --font-body: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
   --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -52,8 +58,15 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+/* Form controls ignore the page font by default. This makes them use
+   the same font and colour as the text around them. Specific rules
+   later in the file (for example the contact form) still override it. */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
 }
 
 img,
@@ -74,6 +87,7 @@ html {
 }
 
 body {
+  margin: 0;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
@@ -82,6 +96,12 @@ body {
   /* A word or URL that is too long for its line breaks instead of
      pushing the page wider than the screen. Everything inherits this. */
   overflow-wrap: break-word;
+}
+
+/* Selected text keeps strong contrast: paper on green is about 6:1. */
+::selection {
+  background: var(--color-green);
+  color: var(--color-paper);
 }
 
 /* Long code scrolls inside its own box, never the whole page. */
@@ -154,9 +174,13 @@ small {
 
 
 /* ==========================================================================
-   5. LINKS
+   5. LINKS AND FOCUS
    ========================================================================== */
 
+/* Every plain link, including links inside paragraphs and Markdown
+   posts, is green AND underlined, so colour is never the only clue.
+   Links inside headings and lists (titles, navigation) soften or drop
+   the underline in their own sections, where position makes them clear. */
 a {
   color: var(--color-green);
   text-decoration: underline;
@@ -168,7 +192,10 @@ a:hover {
   text-decoration-thickness: 2px;
 }
 
-a:focus-visible {
+/* One focus ring for everything a keyboard user can reach: links,
+   buttons and any other focusable element. It appears for keyboard use,
+   not for mouse clicks (except in text fields, which always show it). */
+:focus-visible {
   outline: 2px solid var(--color-green);
   outline-offset: 3px;
 }
@@ -336,10 +363,11 @@ body > footer p {
 }
 
 /* Smaller than the project title on purpose: it labels the section,
-   the project is the main event. */
+   the project is the main event. The minimum is 1.5rem (24px) because
+   orange only has enough contrast on paper at that size and above. */
 .selected-work__heading {
   margin: 0 0 var(--space-6);
-  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  font-size: clamp(1.5rem, 1.4rem + 0.5vw, 1.75rem);
   line-height: 1.2;
 }
 
@@ -878,13 +906,20 @@ body > footer p {
   appearance: none;
 }
 
-/* Focus: the line becomes thicker and green. One pixel is taken from
-   the padding so the layout does not jump. The transparent outline is
-   invisible normally but still shows in high contrast mode. */
+/* Focus, part 1: the line becomes thicker and green. One pixel is
+   taken from the padding so the layout does not jump. */
 .contact-form__input:focus {
   padding-bottom: calc(var(--space-2) - 1px);
   border-bottom: 2px solid var(--color-green);
   outline: 2px solid transparent;
+}
+
+/* Focus, part 2: a real focus ring as well, so the field is clearly
+   marked even for people who cannot see a change in line colour.
+   This comes after the rule above so it replaces the transparent outline. */
+.contact-form__input:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 4px;
 }
 
 .contact-form__textarea {
@@ -892,7 +927,8 @@ body > footer p {
   resize: vertical;
 }
 
-/* Small, square, outlined. Fills green on hover and focus. */
+/* Small, square, outlined. Fills green on hover and focus. Its focus
+   ring comes from the global :focus-visible rule in section 5. */
 .contact-form__button {
   display: block;
   min-height: 2.75rem;            /* comfortable tap size */
@@ -912,11 +948,6 @@ body > footer p {
 .contact-form__button:hover {
   background: var(--color-green);
   color: var(--color-paper);
-}
-
-.contact-form__button:focus-visible {
-  outline: 2px solid var(--color-green);
-  outline-offset: 3px;
 }
 
 /* A centred row of links that wraps onto more lines when needed.
@@ -972,10 +1003,8 @@ body > footer p {
    15. EXPERIMENTS PAGE: CURRENT EXPERIMENTS LIST
    ========================================================================== */
 
-/* ADDED IN THE RESPONSIVE PASS: these classes exist in
-   experiments/index.html but had no styles yet, so the list showed
-   browser defaults (bullets and an indent). This mirrors the Research
-   list in section 12 so the two pages match. */
+/* These classes exist in experiments/index.html. They mirror the
+   Research list in section 12 so the two pages match. */
 .experiment-list {
   --experiment-rule: rgba(28, 26, 22, 0.16);
 }
@@ -1101,3 +1130,37 @@ body > footer p {
     min-height: 2.75rem;
   }
 }
+
+
+/* ==========================================================================
+   17. ACCESSIBILITY HELPERS
+   ========================================================================== */
+
+/* Skip link (first element in <body>). It sits just above the top of
+   the page, out of sight, and slides into view when a keyboard user
+   tabs to it. It is moved, not hidden with display: none, because
+   hidden elements cannot receive keyboard focus. */
+.skip-link {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-green);
+  background: var(--color-paper);
+  color: var(--color-green);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-decoration: none;
+  transform: translateY(-250%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* REDUCED MOTION: nothing in this stylesheet animates or uses
+   transitions, so there is nothing to switch off. If transitions or
+   animations are added later, add a @media (prefers-reduced-motion:
+   reduce) block here that turns them off. */
