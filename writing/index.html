@@ -1,0 +1,44 @@
+---
+layout: default
+title: Writing
+---
+
+{% comment %}
+  Reads these front matter fields from each file in _posts/:
+  title, date (from the filename), description. If there is no
+  description, the start of the post is used instead.
+  Jekyll lists site.posts newest first by default.
+{% endcomment %}
+
+<header class="page-header">
+  <p class="page-header__label">writing</p>
+  <h1 class="page-header__title">Writing</h1>
+  <p class="page-header__intro">Notes, reflections, and ideas from an ongoing exploration of psychology, cognition, learning, AI, and human behaviour.</p>
+</header>
+
+<section class="writing-list" aria-label="All writing">
+  {% if site.posts.size > 0 %}
+    <ul class="writing-list__items">
+      {% for post in site.posts %}
+        <li class="writing-list__item">
+          <article class="writing-entry">
+            <p class="writing-entry__meta">
+              <time class="writing-entry__date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+            </p>
+
+            <h2 class="writing-entry__title">
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            </h2>
+
+            {% assign summary = post.description | default: post.excerpt | strip_html | strip | truncate: 180 %}
+            {% if summary != blank %}
+              <p class="writing-entry__description">{{ summary }}</p>
+            {% endif %}
+          </article>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="writing-list__empty">Writing will appear here as ideas develop.</p>
+  {% endif %}
+</section>

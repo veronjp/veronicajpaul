@@ -657,3 +657,126 @@ body > footer p {
     font-size: 1.125rem;
   }
 }
+
+
+/* ==========================================================================
+   13. WRITING LANDING PAGE
+   ========================================================================== */
+
+/* The page header (label, title, introduction) reuses the shared
+   .page-header styles in section 11, so it is not repeated here.
+   The list is an archive: date in the margin, title and excerpt beside it. */
+.writing-list {
+  --writing-rule: rgba(28, 26, 22, 0.16);
+}
+
+.writing-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A thin rule between entries, nothing around them. */
+.writing-list__item {
+  padding-block: var(--space-5);
+}
+
+.writing-list__item + .writing-list__item {
+  border-top: 1px solid var(--writing-rule);
+}
+
+.writing-list__item:first-child {
+  padding-top: 0;
+}
+
+.writing-entry {
+  margin: 0;
+}
+
+/* The date is a small DM Mono label in grey, like a notebook margin note. */
+.writing-entry__meta {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* Young Serif comes from the h2 rule. The title is a link, so it is
+   green, with a soft underline that becomes solid on hover. */
+.writing-entry__title {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.writing-entry__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.writing-entry__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.writing-entry__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Empty state: a blank row, as in a notebook index, so it looks
+   deliberate. A hollow orange circle marks "nothing here yet". */
+.writing-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--writing-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.writing-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+/* From 34rem up, the date sits in a left column and the title and
+   excerpt sit to its right. Below that, everything stacks. */
+@media (min-width: 34rem) {
+  .writing-list__item {
+    padding-block: var(--space-6);
+  }
+
+  .writing-entry {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    column-gap: var(--space-5);
+    align-items: baseline;
+  }
+
+  .writing-entry__meta {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0;
+  }
+
+  .writing-entry__title,
+  .writing-entry__description {
+    grid-column: 2;
+  }
+
+  .writing-entry__description {
+    font-size: 1.125rem;
+  }
+}
