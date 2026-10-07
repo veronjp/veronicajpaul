@@ -474,3 +474,186 @@ body > footer p {
     padding-block: var(--space-4);
   }
 }
+
+
+/* ==========================================================================
+   11. SECTION PAGE HEADERS (shared)
+   ========================================================================== */
+
+/* NOTE: the .page-header classes are used by BOTH research/index.html and
+   experiments/index.html, so this section styles the header on both pages.
+   Label, big orange title, short introduction, one thin rule underneath. */
+.page-header {
+  --page-header-rule: rgba(28, 26, 22, 0.16);
+  padding-block: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--page-header-rule);
+}
+
+/* Same small DM Mono label with an orange square as the homepage intro. */
+.page-header__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.page-header__label::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-orange);
+}
+
+/* Young Serif and orange come from the global h1 rule. This only sets
+   size and spacing, and cancels the large default top margin. */
+.page-header__title {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(2.25rem, 1.5rem + 3.6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.page-header__intro {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 34rem) {
+  .page-header {
+    padding-block: var(--space-6) var(--space-7);
+    margin-bottom: var(--space-7);
+  }
+
+  .page-header__intro {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   12. RESEARCH LANDING PAGE
+   ========================================================================== */
+
+.research-list {
+  --research-rule: rgba(28, 26, 22, 0.16);
+}
+
+.research-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A thin rule between entries, nothing around them. */
+.research-list__item {
+  padding-block: var(--space-6);
+}
+
+.research-list__item + .research-list__item {
+  border-top: 1px solid var(--research-rule);
+}
+
+.research-list__item:first-child {
+  padding-top: 0;
+}
+
+.research-item {
+  margin: 0;
+}
+
+/* Small DM Mono line above the title: type, separator, status. */
+.research-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* Small orange dot marks the status, like on the homepage. */
+.research-item__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.research-item__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+/* The title is a link, so it is green. Young Serif comes from the h2
+   rule. The underline is soft and becomes solid on hover. */
+.research-item__title {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.125rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.research-item__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.research-item__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.research-item__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Empty state: styled like a blank row in a notebook index, so it
+   looks deliberate. A hollow orange circle marks "nothing here yet". */
+.research-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--research-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.research-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+@media (min-width: 34rem) {
+  .research-list__item {
+    padding-block: var(--space-7);
+  }
+
+  .research-item__description {
+    font-size: 1.125rem;
+  }
+}

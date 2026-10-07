@@ -6,3 +6,6 @@ collections:
   experiments:
     output: true
     permalink: /experiments/:name/
+  research:
+    output: true
+    permalink: /research/:name/
