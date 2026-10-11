@@ -4,12 +4,12 @@
 
 :root {
   /* Colours */
-  --color-orange: #D2541C;       /* primary: main headings, personality */
-  --color-burnt: #9C3F14;        /* secondary: supporting headings */
-  --color-green: #1F6B4A;        /* interaction: links, focus */
+  --color-orange: #6378ee;       /* primary: main headings, personality */
+  --color-burnt: #A63D8E;        /* secondary: supporting headings */
+  --color-green: #ac30b1;        /* interaction: links, focus */
   --color-ink: #1C1A16;          /* body text */
   --color-grey: #6B6B6B;         /* quiet metadata */
-  --color-paper: #FBF7EE;        /* page background */
+  --color-paper: #eeeeee;        /* page background */
 
   /* CONTRAST NOTES (approximate ratios on the paper background):
      ink 16:1, green 6:1, grey 5:1, burnt orange 6:1, orange 3.9:1.
@@ -332,11 +332,13 @@ body > footer p {
   background: var(--color-orange);
 }
 
-/* The dominant element on the homepage. */
+/* The homepage statement. Its size now matches the main page headings
+   on the Experiments, Research and Writing pages (.page-header__title),
+   so the same clamp() value is used here. */
 .intro__statement {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.75rem, 1.6rem + 6vw, 5.5rem);
+  font-size: clamp(2.25rem, 1.5rem + 3.6vw, 3.75rem);
   line-height: 1.02;
   letter-spacing: -0.015em;
   color: var(--color-orange);
@@ -844,13 +846,15 @@ body > footer p {
   text-align: center;
 }
 
-/* Large Young Serif heading. Orange comes from the global h2 rule.
-   The short orange bar under it is drawn in CSS, no extra HTML. */
+/* Young Serif heading, same size as the Selected Work heading and grey
+   (this class overrides the orange from the global h2 rule). The short
+   orange bar under it is drawn in CSS, no extra HTML. */
 .contact__heading {
   margin: 0 0 var(--space-7);
-  font-size: clamp(2.75rem, 1.6rem + 5vw, 4.5rem);
+  font-size: clamp(1.5rem, 1.4rem + 0.5vw, 1.75rem);
   line-height: 1.05;
   letter-spacing: -0.015em;
+  color: var(--color-grey);
 }
 
 .contact__heading::after {
