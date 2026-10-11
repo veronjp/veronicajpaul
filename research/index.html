@@ -1,0 +1,51 @@
+---
+layout: default
+title: Research
+---
+
+{% comment %}
+  Reads these front matter fields from each file in _research/:
+  title, type, status, description. Only title is required.
+{% endcomment %}
+
+<header class="page-header">
+  <p class="page-header__label">research</p>
+  <h1 class="page-header__title">Research</h1>
+  <p class="page-header__intro">Independent work in psychology, cognition, behavioural science, AI, research methods, and data analysis.</p>
+</header>
+
+<section class="research-list" aria-label="All research">
+  {% if site.research.size > 0 %}
+    <ul class="research-list__items">
+      {% for item in site.research %}
+        <li class="research-list__item">
+          <article class="research-item">
+            {% if item.type or item.status %}
+              <p class="research-item__meta">
+                {% if item.type %}
+                  <span class="research-item__type">{{ item.type }}</span>
+                {% endif %}
+                {% if item.type and item.status %}
+                  <span class="research-item__separator" aria-hidden="true">·</span>
+                {% endif %}
+                {% if item.status %}
+                  <span class="research-item__status">{{ item.status }}</span>
+                {% endif %}
+              </p>
+            {% endif %}
+
+            <h2 class="research-item__title">
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            </h2>
+
+            {% if item.description %}
+              <p class="research-item__description">{{ item.description }}</p>
+            {% endif %}
+          </article>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="research-list__empty">Research work will appear here as it develops.</p>
+  {% endif %}
+</section>

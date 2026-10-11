@@ -1,0 +1,71 @@
+---
+layout: default
+title: Experiments
+---
+
+{% comment %}
+  Reads these front matter fields from each file in _experiments/:
+  title, type, status, summary. Only title is required.
+{% endcomment %}
+
+<header class="page-header">
+  <p class="page-header__label">experiments</p>
+  <h1 class="page-header__title">Experiments</h1>
+  <p class="page-header__intro">Small behavioural science experiments, prototypes, and tests exploring how people think, learn, decide, and interact with AI.</p>
+</header>
+
+<section class="experiment-list" aria-label="All experiments">
+  {% if site.experiments.size > 0 %}
+    <ul class="experiment-list__items">
+      {% for experiment in site.experiments %}
+        <li class="experiment-list__item">
+          <article class="experiment">
+            {% if experiment.type or experiment.status %}
+              <p class="experiment__meta">
+                {% if experiment.type %}
+                  <span class="experiment__type">{{ experiment.type }}</span>
+                {% endif %}
+                {% if experiment.type and experiment.status %}
+                  <span class="experiment__separator" aria-hidden="true">·</span>
+                {% endif %}
+                {% if experiment.status %}
+                  <span class="experiment__status">{{ experiment.status }}</span>
+                {% endif %}
+              </p>
+            {% endif %}
+
+            <h2 class="experiment__title">
+              <a href="{{ experiment.url | relative_url }}">{{ experiment.title }}</a>
+            </h2>
+
+            {% if experiment.summary %}
+              <p class="experiment__summary">{{ experiment.summary }}</p>
+            {% endif %}
+          </article>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="experiment-list__empty">Experiments will appear here as they are built.</p>
+  {% endif %}
+</section>
+
+<section class="legacy-builds" aria-labelledby="legacy-builds-heading">
+  <h2 class="legacy-builds__heading" id="legacy-builds-heading">Earlier experiment builds</h2>
+  <p class="legacy-builds__intro">Earlier builds, kept online for reference. They are not current research projects.</p>
+
+  <ul class="legacy-builds__list">
+    <li class="legacy-builds__item">
+      <a class="legacy-builds__link" href="{{ '/swls.html' | relative_url }}">SWLS</a>
+    </li>
+    <li class="legacy-builds__item">
+      <a class="legacy-builds__link" href="{{ '/scs.html' | relative_url }}">Self-Compassion Scale - Short Form</a>
+    </li>
+    <li class="legacy-builds__item">
+      <a class="legacy-builds__link" href="{{ '/rosenbergselfesteem-scale.html' | relative_url }}">Rosenberg Self-Esteem Scale</a>
+    </li>
+    <li class="legacy-builds__item">
+      <a class="legacy-builds__link" href="{{ '/all-surveys.html' | relative_url }}">3 Surveys Check-In: SWLS + Rosenberg + Self-Compassion</a>
+    </li>
+  </ul>
+</section>

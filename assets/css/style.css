@@ -1,0 +1,1166 @@
+/* ==========================================================================
+   1. BRAND TOKENS
+   ========================================================================== */
+
+:root {
+  /* Colours */
+  --color-orange: #D2541C;       /* primary: main headings, personality */
+  --color-burnt: #9C3F14;        /* secondary: supporting headings */
+  --color-green: #1F6B4A;        /* interaction: links, focus */
+  --color-ink: #1C1A16;          /* body text */
+  --color-grey: #6B6B6B;         /* quiet metadata */
+  --color-paper: #FBF7EE;        /* page background */
+
+  /* CONTRAST NOTES (approximate ratios on the paper background):
+     ink 16:1, green 6:1, grey 5:1, burnt orange 6:1, orange 3.9:1.
+     Orange is below the 4.5:1 needed for small text. It is only used for
+     large text (24px and up), where 3:1 is enough, and for decoration.
+     Do not use orange for small text. Use burnt orange or ink instead. */
+
+  /* Fonts (loaded in the layout; fallbacks keep text readable meanwhile) */
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Widths */
+  --width-text: 40rem;
+  --width-wide: 64rem;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+
+  /* Side padding of the page: small on phones, larger from 34rem up */
+  --page-pad: 1.25rem;
+}
+
+@media (min-width: 34rem) {
+  :root {
+    --page-pad: 2rem;
+  }
+}
+
+
+/* ==========================================================================
+   2. BASE RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Form controls ignore the page font by default. This makes them use
+   the same font and colour as the text around them. Specific rules
+   later in the file (for example the contact form) still override it. */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* ==========================================================================
+   3. DOCUMENT
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  line-height: 1.65;
+  /* A word or URL that is too long for its line breaks instead of
+     pushing the page wider than the screen. Everything inherits this. */
+  overflow-wrap: break-word;
+}
+
+/* Selected text keeps strong contrast: paper on green is about 6:1. */
+::selection {
+  background: var(--color-green);
+  color: var(--color-paper);
+}
+
+/* Long code scrolls inside its own box, never the whole page. */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+
+/* ==========================================================================
+   4. HEADINGS AND TEXT
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 400;              /* Young Serif has a single weight */
+  line-height: 1.15;
+  margin-block: var(--space-7) var(--space-4);
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  color: var(--color-orange);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-burnt);
+}
+
+h1 {
+  font-size: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+}
+
+h4,
+h5,
+h6 {
+  font-size: 1.125rem;
+}
+
+p,
+ul,
+ol {
+  margin-block: 0 var(--space-4);
+}
+
+small {
+  color: var(--color-grey);
+}
+
+
+/* ==========================================================================
+   5. LINKS AND FOCUS
+   ========================================================================== */
+
+/* Every plain link, including links inside paragraphs and Markdown
+   posts, is green AND underlined, so colour is never the only clue.
+   Links inside headings and lists (titles, navigation) soften or drop
+   the underline in their own sections, where position makes them clear. */
+a {
+  color: var(--color-green);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* One focus ring for everything a keyboard user can reach: links,
+   buttons and any other focusable element. It appears for keyboard use,
+   not for mouse clicks (except in text fields, which always show it). */
+:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 3px;
+}
+
+
+/* ==========================================================================
+   6. PAGE STRUCTURE
+   ========================================================================== */
+
+/* Header, main and footer share the same centred column. */
+body > header,
+body > main,
+body > footer {
+  width: min(100% - (2 * var(--page-pad)), var(--width-text));
+  margin-inline: auto;
+}
+
+body > header {
+  padding-block: var(--space-5) var(--space-4);
+}
+
+/* Phones: less space above the content, because the sections inside
+   already add their own. Desktop spacing is set in the media query. */
+body > main {
+  padding-block: var(--space-5) var(--space-7);
+}
+
+body > footer {
+  padding-block: var(--space-7) var(--space-6);
+  color: var(--color-grey);
+  font-size: 0.875rem;
+}
+
+body > footer p {
+  margin: 0;
+}
+
+@media (min-width: 34rem) {
+  body > header {
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  body > main {
+    padding-block: var(--space-8);
+  }
+}
+
+
+/* ==========================================================================
+   7. SITE HEADER AND NAVIGATION
+   ========================================================================== */
+
+/* Site name on the left, navigation on the right. When there is not
+   enough room, the navigation wraps onto its own line. */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+}
+
+.site-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.site-name:hover {
+  color: var(--color-green);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+/* The list is only a list for meaning. Visually it is a row of links.
+   The gap between links shrinks on narrow screens (clamp) so more
+   links fit on each line before the row wraps. */
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 clamp(var(--space-3), 4vw, var(--space-5));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav__link {
+  display: inline-block;
+  padding-block: var(--space-2);   /* larger click and tap area */
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  color: var(--color-green);
+  text-decoration: none;
+}
+
+.site-nav__link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+
+/* ==========================================================================
+   8. HOMEPAGE INTRODUCTION
+   ========================================================================== */
+
+/* Phones: a shorter gap above and below the statement.
+   Desktop spacing is set in the media query. */
+.intro {
+  padding-block: var(--space-5) var(--space-7);
+}
+
+/* Small technical label with a little orange square in front of it. */
+.intro__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.intro__label::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-orange);
+}
+
+/* The dominant element on the homepage. */
+.intro__statement {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 1.6rem + 6vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  color: var(--color-orange);
+  text-wrap: balance;
+}
+
+@media (min-width: 34rem) {
+  .intro {
+    padding-block: var(--space-8) var(--space-9);
+  }
+}
+
+
+/* ==========================================================================
+   9. HOMEPAGE: SELECTED WORK
+   ========================================================================== */
+
+/* A thin rule marks the start of the section. The rule colour is a
+   local variable so it does not change the global brand tokens. */
+.selected-work {
+  --selected-work-rule: rgba(28, 26, 22, 0.16);
+  padding-block: var(--space-6) var(--space-7);
+  border-top: 1px solid var(--selected-work-rule);
+}
+
+/* Smaller than the project title on purpose: it labels the section,
+   the project is the main event. The minimum is 1.5rem (24px) because
+   orange only has enough contrast on paper at that size and above. */
+.selected-work__heading {
+  margin: 0 0 var(--space-6);
+  font-size: clamp(1.5rem, 1.4rem + 0.5vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.project {
+  margin: 0;
+}
+
+/* Small technical line above the title: type, separator, status. */
+.project__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* A small orange dot marks the status. */
+.project__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.project__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+/* The strongest element in this section. Ink keeps it readable and
+   leaves orange for the section heading above it. */
+.project__title {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.75rem, 1.3rem + 2.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.project__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 34rem) {
+  .selected-work {
+    padding-block: var(--space-7) var(--space-8);
+  }
+
+  .selected-work__heading {
+    margin-bottom: var(--space-7);
+  }
+
+  .project__description {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   10. EXPERIMENTS PAGE: EARLIER EXPERIMENT BUILDS
+   ========================================================================== */
+
+/* Deliberately quieter than the current experiments above it: smaller
+   heading, grey introduction, plain numbered list, thin rules.
+   The rule colour is a local variable, like in Selected Work.
+   Phones get a smaller gap above the section (desktop is set below). */
+.legacy-builds {
+  --legacy-rule: rgba(28, 26, 22, 0.16);
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--legacy-rule);
+}
+
+/* Burnt orange and small, so it reads as secondary. */
+.legacy-builds__heading {
+  margin: 0 0 var(--space-3);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--color-burnt);
+}
+
+.legacy-builds__intro {
+  max-width: 34em;
+  margin: 0 0 var(--space-5);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-grey);
+}
+
+/* A CSS counter numbers the rows (01, 02, ...) without extra HTML.
+   The number is a small DM Mono label in grey. */
+.legacy-builds__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: legacy-build;
+}
+
+.legacy-builds__item {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--space-3);
+  align-items: baseline;
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--legacy-rule);
+  counter-increment: legacy-build;
+}
+
+.legacy-builds__item:last-child {
+  border-bottom: 0;
+}
+
+.legacy-builds__item::before {
+  content: counter(legacy-build, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+/* Green, slightly smaller than body text, with a soft underline that
+   becomes solid on hover. minmax(0, 1fr) above lets long titles wrap. */
+.legacy-builds__link {
+  font-size: 1rem;
+  line-height: 1.4;
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.legacy-builds__link:hover {
+  text-decoration-color: currentColor;
+}
+
+@media (min-width: 34rem) {
+  .legacy-builds {
+    margin-top: var(--space-9);
+    padding-top: var(--space-6);
+  }
+
+  .legacy-builds__item {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    padding-block: var(--space-4);
+  }
+}
+
+
+/* ==========================================================================
+   11. SECTION PAGE HEADERS (shared)
+   ========================================================================== */
+
+/* NOTE: the .page-header classes are used by BOTH research/index.html and
+   experiments/index.html, so this section styles the header on both pages.
+   Label, big orange title, short introduction, one thin rule underneath. */
+.page-header {
+  --page-header-rule: rgba(28, 26, 22, 0.16);
+  padding-block: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--page-header-rule);
+}
+
+/* Same small DM Mono label with an orange square as the homepage intro. */
+.page-header__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.page-header__label::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-orange);
+}
+
+/* Young Serif and orange come from the global h1 rule. This only sets
+   size and spacing, and cancels the large default top margin. */
+.page-header__title {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(2.25rem, 1.5rem + 3.6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.page-header__intro {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 34rem) {
+  .page-header {
+    padding-block: var(--space-6) var(--space-7);
+    margin-bottom: var(--space-7);
+  }
+
+  .page-header__intro {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   12. RESEARCH LANDING PAGE
+   ========================================================================== */
+
+.research-list {
+  --research-rule: rgba(28, 26, 22, 0.16);
+}
+
+.research-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A thin rule between entries, nothing around them. */
+.research-list__item {
+  padding-block: var(--space-6);
+}
+
+.research-list__item + .research-list__item {
+  border-top: 1px solid var(--research-rule);
+}
+
+.research-list__item:first-child {
+  padding-top: 0;
+}
+
+.research-item {
+  margin: 0;
+}
+
+/* Small DM Mono line above the title: type, separator, status. */
+.research-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* Small orange dot marks the status, like on the homepage. */
+.research-item__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.research-item__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+/* The title is a link, so it is green. Young Serif comes from the h2
+   rule. The underline is soft and becomes solid on hover. */
+.research-item__title {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.125rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.research-item__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.research-item__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.research-item__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Empty state: styled like a blank row in a notebook index, so it
+   looks deliberate. A hollow orange circle marks "nothing here yet". */
+.research-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--research-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.research-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+@media (min-width: 34rem) {
+  .research-list__item {
+    padding-block: var(--space-7);
+  }
+
+  .research-item__description {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   13. WRITING LANDING PAGE
+   ========================================================================== */
+
+/* The page header (label, title, introduction) reuses the shared
+   .page-header styles in section 11, so it is not repeated here.
+   The list is an archive: date in the margin, title and excerpt beside it. */
+.writing-list {
+  --writing-rule: rgba(28, 26, 22, 0.16);
+}
+
+.writing-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A thin rule between entries, nothing around them. */
+.writing-list__item {
+  padding-block: var(--space-5);
+}
+
+.writing-list__item + .writing-list__item {
+  border-top: 1px solid var(--writing-rule);
+}
+
+.writing-list__item:first-child {
+  padding-top: 0;
+}
+
+.writing-entry {
+  margin: 0;
+}
+
+/* The date is a small DM Mono label in grey, like a notebook margin note. */
+.writing-entry__meta {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+/* Young Serif comes from the h2 rule. The title is a link, so it is
+   green, with a soft underline that becomes solid on hover. */
+.writing-entry__title {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.writing-entry__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.writing-entry__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.writing-entry__description {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Empty state: a blank row, as in a notebook index, so it looks
+   deliberate. A hollow orange circle marks "nothing here yet". */
+.writing-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--writing-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.writing-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+/* From 34rem up, the date sits in a left column and the title and
+   excerpt sit to its right. Below that, everything stacks. */
+@media (min-width: 34rem) {
+  .writing-list__item {
+    padding-block: var(--space-6);
+  }
+
+  .writing-entry {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    column-gap: var(--space-5);
+    align-items: baseline;
+  }
+
+  .writing-entry__meta {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0;
+  }
+
+  .writing-entry__title,
+  .writing-entry__description {
+    grid-column: 2;
+  }
+
+  .writing-entry__description {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   14. HOMEPAGE: CONTACT
+   ========================================================================== */
+
+/* Same thin rule at the top as Selected Work. Everything inside is
+   centred, except the typed text, which stays left aligned. */
+.contact {
+  --contact-rule: rgba(28, 26, 22, 0.16);
+  --contact-line: rgba(28, 26, 22, 0.55);   /* underline of each field */
+  padding-block: var(--space-7) var(--space-8);
+  border-top: 1px solid var(--contact-rule);
+  text-align: center;
+}
+
+/* Large Young Serif heading. Orange comes from the global h2 rule.
+   The short orange bar under it is drawn in CSS, no extra HTML. */
+.contact__heading {
+  margin: 0 0 var(--space-7);
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.contact__heading::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin: var(--space-5) auto 0;
+  background: var(--color-orange);
+}
+
+.contact-form {
+  text-align: left;
+}
+
+.contact-form__field {
+  margin: 0 0 var(--space-6);
+}
+
+/* Small DM Mono label above each line. It turns green while that
+   field has focus. */
+.contact-form__label {
+  display: block;
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.contact-form__field:focus-within .contact-form__label {
+  color: var(--color-green);
+}
+
+/* No box: only a line underneath, like writing on a ruled page.
+   font-size stays above 16px so phones do not zoom in on focus.
+   width: 100% with border-box sizing keeps fields inside the screen. */
+.contact-form__input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: var(--space-2) 0;
+  border: 0;
+  border-bottom: 1px solid var(--contact-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Focus, part 1: the line becomes thicker and green. One pixel is
+   taken from the padding so the layout does not jump. */
+.contact-form__input:focus {
+  padding-bottom: calc(var(--space-2) - 1px);
+  border-bottom: 2px solid var(--color-green);
+  outline: 2px solid transparent;
+}
+
+/* Focus, part 2: a real focus ring as well, so the field is clearly
+   marked even for people who cannot see a change in line colour.
+   This comes after the rule above so it replaces the transparent outline. */
+.contact-form__input:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 4px;
+}
+
+.contact-form__textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+/* Small, square, outlined. Fills green on hover and focus. Its focus
+   ring comes from the global :focus-visible rule in section 5. */
+.contact-form__button {
+  display: block;
+  min-height: 2.75rem;            /* comfortable tap size */
+  margin: var(--space-7) auto 0;
+  padding: var(--space-2) var(--space-6);
+  border: 1px solid var(--color-green);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-green);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.contact-form__button:hover {
+  background: var(--color-green);
+  color: var(--color-paper);
+}
+
+/* A centred row of links that wraps onto more lines when needed.
+   Phones get a smaller gap above it (desktop is set below). */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-5);
+  margin: var(--space-7) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-links__link {
+  display: inline-block;
+  padding-block: var(--space-2);   /* larger tap area */
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.social-links__link:hover {
+  text-decoration-color: currentColor;
+}
+
+@media (min-width: 34rem) {
+  .contact {
+    padding-block: var(--space-8) var(--space-9);
+  }
+
+  .contact__heading {
+    margin-bottom: var(--space-8);
+  }
+
+  .contact-form__field {
+    margin-bottom: var(--space-7);
+  }
+
+  .contact-form__input {
+    font-size: 1.25rem;
+  }
+
+  .social-links {
+    margin-top: var(--space-8);
+  }
+}
+
+
+/* ==========================================================================
+   15. EXPERIMENTS PAGE: CURRENT EXPERIMENTS LIST
+   ========================================================================== */
+
+/* These classes exist in experiments/index.html. They mirror the
+   Research list in section 12 so the two pages match. */
+.experiment-list {
+  --experiment-rule: rgba(28, 26, 22, 0.16);
+}
+
+.experiment-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experiment-list__item {
+  padding-block: var(--space-6);
+}
+
+.experiment-list__item + .experiment-list__item {
+  border-top: 1px solid var(--experiment-rule);
+}
+
+.experiment-list__item:first-child {
+  padding-top: 0;
+}
+
+.experiment {
+  margin: 0;
+}
+
+.experiment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--color-grey);
+}
+
+.experiment__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.experiment__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-orange);
+}
+
+.experiment__title {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.125rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.experiment__title a {
+  text-decoration-color: rgba(31, 107, 74, 0.4);
+}
+
+.experiment__title a:hover {
+  text-decoration-color: currentColor;
+}
+
+.experiment__summary {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.experiment-list__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--experiment-rule);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-grey);
+}
+
+.experiment-list__empty::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1.5px solid var(--color-orange);
+  border-radius: 50%;
+}
+
+@media (min-width: 34rem) {
+  .experiment-list__item {
+    padding-block: var(--space-7);
+  }
+
+  .experiment__summary {
+    font-size: 1.125rem;
+  }
+}
+
+
+/* ==========================================================================
+   16. TOUCH SCREENS
+   ========================================================================== */
+
+/* Phones and tablets: links in the header and the social row get a
+   tap area of at least 44px tall. Mouse users keep the compact look.
+   One query covers every touch device, whatever its screen width. */
+@media (pointer: coarse) {
+  .site-name,
+  .site-nav__link,
+  .social-links__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+}
+
+
+/* ==========================================================================
+   17. ACCESSIBILITY HELPERS
+   ========================================================================== */
+
+/* Skip link (first element in <body>). It sits just above the top of
+   the page, out of sight, and slides into view when a keyboard user
+   tabs to it. It is moved, not hidden with display: none, because
+   hidden elements cannot receive keyboard focus. */
+.skip-link {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-green);
+  background: var(--color-paper);
+  color: var(--color-green);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-decoration: none;
+  transform: translateY(-250%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* REDUCED MOTION: nothing in this stylesheet animates or uses
+   transitions, so there is nothing to switch off. If transitions or
+   animations are added later, add a @media (prefers-reduced-motion:
+   reduce) block here that turns them off. */
