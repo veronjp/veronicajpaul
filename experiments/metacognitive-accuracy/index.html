@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Metacognitive Accuracy</title>
+</head>
+<body>
+  <h1>How Accurate Is Your Thinking?</h1>
+
+  <p>
+    Explore how accurately you estimate your
+    performance before and after using AI.
+  </p>
+
+  <h2>Metacognitive Accuracy Demonstration</h2>
+
+  <p>
+        <label for="before">Estimated score before AI:</label>
+    <input type="number" id="before" min="0" max="10">
+
+    <br><br>
+
+    <label for="after">Estimated score after AI:</label>
+    <input type="number" id="after" min="0" max="10">
+
+    <br><br>
+
+    <label for="actual">Actual score:</label>
+    <input type="number" id="actual" min="0" max="10">
+
+    <br><br>
+
+    <button id="calculate">Calculate Accuracy</button>
+
+    <p id="result"></p>
+  </p>
+  <script>
+  const button = document.getElementById("calculate");
+  const result = document.getElementById("result");
+
+  button.addEventListener("click", function() {
+  const before = Number(document.getElementById("before").value);
+  const after = Number(document.getElementById("after").value);
+  const actual = Number(document.getElementById("actual").value);
+
+  const inputs = ["before", "after", "actual"];
+
+const invalid = inputs.some(function(id) {
+  const field = document.getElementById(id);
+  const value = Number(field.value);
+
+  return field.value.trim() === "" ||
+         !Number.isFinite(value) ||
+         value < 0 ||
+         value > 10 ||
+         !Number.isInteger(value);
+});
+
+if (invalid) {
+  result.textContent =
+    "Please enter a whole number between 0 and 10 in every field.";
+  return;
+}
+
+  const beforeError = Math.abs(before - actual);
+  const afterError = Math.abs(after - actual);
+
+  let outcome;
+
+if (afterError < beforeError) {
+  outcome = "Improved";
+} else if (afterError > beforeError) {
+  outcome = "Deteriorated";
+} else {
+  outcome = "No change";
+}
+
+result.textContent =
+  "Before error: " + beforeError +
+  " | After error: " + afterError +
+  " | Accuracy: " + outcome;
+});
+</script>
+</body>
+</html>
