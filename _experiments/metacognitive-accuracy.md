@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Metacognitive Accuracy"
+permalink: /experiments/metacognitive-accuracy-overview/
 type: "Interactive demonstration"
 status: "Prototype"
 summary: "Explore how accurately people estimate their performance and how estimation accuracy can change."
