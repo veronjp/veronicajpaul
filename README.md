@@ -12,9 +12,14 @@ An independent lab notebook for experiments, research, writing, and explorations
 - `research/`: research index
 - `_posts/`: Jekyll writing posts
 - `writing/`: writing index
-- `_layouts/`: shared page layouts
-- `_includes/`: shared header and footer
-- `assets/css/style.css`: global design system and styling
+- `about/`: About page
+- `contact/`: contact page (the Formspree form lives here)
+- `_layouts/`: shared page layouts (`default`, and `prose` for Markdown pages)
+- `_includes/`: shared header, footer, and the image card used on the homepage and Experiments page
+- `_data/social.yml`: footer social links (a link appears once its `url` is filled in)
+- `assets/css/style.css`: global design system and styling (colours, type, and spacing are tokens at the top)
+- `assets/js/nav.js`: mobile menu
+- `assets/images/`: local card illustrations
 
 ## Local development
 

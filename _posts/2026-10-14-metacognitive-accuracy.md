@@ -1,11 +1,11 @@
 ---
-layout: default
+layout: post
 title: "Lab Note 001: Metacognitive Accuracy"
+description: "Does AI change how accurately we judge our own performance?"
+label: "Lab note 001"
+type: "Computational demonstration"
+status: "Prototype"
 ---
-
-# Lab Note 001: Metacognitive Accuracy
-
-*Does AI change how accurately we judge our own performance?*
 
 ## The Question
 
@@ -33,7 +33,7 @@ The tool calculates absolute estimation error and
 identifies whether accuracy improved, deteriorated,
 or remained unchanged.
 
-[Try the interactive demonstration]({{ '/experiments/metacognitive-accuracy/' | relative_url }})
+[Try the interactive demonstration]({{ '/experiments/metacognitive-accuracy/' | relative_url }}){: .button}
 
 ## Limitations
 

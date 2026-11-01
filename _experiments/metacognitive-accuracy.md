@@ -1,9 +1,12 @@
 ---
-layout: default
+layout: prose
 title: "Metacognitive Accuracy"
 permalink: /experiments/metacognitive-accuracy-overview/
 type: "Interactive demonstration"
 status: "Prototype"
+card_label: "Interactive demo"
+image: /assets/images/cognitive-dots.svg
+image_alt: "Abstract pattern of orange, grey, and lavender dots forming a circle"
 summary: "Explore how accurately people estimate their performance and how estimation accuracy can change."
 ---
 

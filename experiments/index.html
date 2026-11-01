@@ -5,7 +5,8 @@ title: Experiments
 
 {% comment %}
   Reads these front matter fields from each file in _experiments/:
-  title, type, status, summary. Only title is required.
+  title (required), card_label, type, summary or description, image, image_alt.
+  Current work is shown as large cards. Earlier builds sit in the archive below.
 {% endcomment %}
 
 <header class="page-header">
@@ -14,58 +15,44 @@ title: Experiments
   <p class="page-header__intro">Small behavioural science experiments, prototypes, and tests exploring how people think, learn, decide, and interact with AI.</p>
 </header>
 
-<section class="experiment-list" aria-label="All experiments">
+<section class="section" aria-labelledby="current-work-heading">
+  <h2 class="section__heading" id="current-work-heading">Ongoing studies and interactive demonstrations</h2>
+
   {% if site.experiments.size > 0 %}
-    <ul class="experiment-list__items">
+    <div class="card-grid">
       {% for experiment in site.experiments %}
-        <li class="experiment-list__item">
-          <article class="experiment">
-            {% if experiment.type or experiment.status %}
-              <p class="experiment__meta">
-                {% if experiment.type %}
-                  <span class="experiment__type">{{ experiment.type }}</span>
-                {% endif %}
-                {% if experiment.type and experiment.status %}
-                  <span class="experiment__separator" aria-hidden="true">·</span>
-                {% endif %}
-                {% if experiment.status %}
-                  <span class="experiment__status">{{ experiment.status }}</span>
-                {% endif %}
-              </p>
-            {% endif %}
-
-            <h2 class="experiment__title">
-              <a href="{{ experiment.url | relative_url }}">{{ experiment.title }}</a>
-            </h2>
-
-            {% if experiment.summary %}
-              <p class="experiment__summary">{{ experiment.summary }}</p>
-            {% endif %}
-          </article>
-        </li>
+        {% capture card_label %}{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }} / {{ experiment.card_label | default: experiment.type | default: "Experiment" }}{% endcapture %}
+        {% assign card_text = experiment.summary | default: experiment.description %}
+        {% include research-card.html
+           url=experiment.url
+           label=card_label
+           title=experiment.title
+           description=card_text
+           image=experiment.image
+           alt=experiment.image_alt %}
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p class="experiment-list__empty">Experiments will appear here as they are built.</p>
+    <p class="empty-state">Experiments will appear here as they are built.</p>
   {% endif %}
 </section>
 
-<section class="legacy-builds" aria-labelledby="legacy-builds-heading">
-  <h2 class="legacy-builds__heading" id="legacy-builds-heading">Earlier experiment builds</h2>
-  <p class="legacy-builds__intro">Earlier builds, kept online for reference. They are not current research projects.</p>
+<section class="archive" aria-labelledby="archive-heading">
+  <h2 class="archive__heading" id="archive-heading">Earlier experiment builds</h2>
+  <p class="archive__intro">Earlier builds, kept online for reference. They are not current research projects.</p>
 
-  <ul class="legacy-builds__list">
-    <li class="legacy-builds__item">
-      <a class="legacy-builds__link" href="{{ '/swls.html' | relative_url }}">SWLS</a>
+  <ul class="archive__list">
+    <li class="archive__item">
+      <a class="archive__link" href="{{ '/swls.html' | relative_url }}">SWLS</a>
     </li>
-    <li class="legacy-builds__item">
-      <a class="legacy-builds__link" href="{{ '/scs.html' | relative_url }}">Self-Compassion Scale - Short Form</a>
+    <li class="archive__item">
+      <a class="archive__link" href="{{ '/scs.html' | relative_url }}">Self-Compassion Scale - Short Form</a>
     </li>
-    <li class="legacy-builds__item">
-      <a class="legacy-builds__link" href="{{ '/rosenbergselfesteem-scale.html' | relative_url }}">Rosenberg Self-Esteem Scale</a>
+    <li class="archive__item">
+      <a class="archive__link" href="{{ '/rosenbergselfesteem-scale.html' | relative_url }}">Rosenberg Self-Esteem Scale</a>
     </li>
-    <li class="legacy-builds__item">
-      <a class="legacy-builds__link" href="{{ '/all-surveys.html' | relative_url }}">3 Surveys Check-In: SWLS + Rosenberg + Self-Compassion</a>
+    <li class="archive__item">
+      <a class="archive__link" href="{{ '/all-surveys.html' | relative_url }}">3 Surveys Check-In: SWLS + Rosenberg + Self-Compassion</a>
     </li>
   </ul>
 </section>
