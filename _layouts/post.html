@@ -1,0 +1,90 @@
+---
+layout: default
+---
+{% comment %}
+  Lab note layout (design option C).
+
+  Front matter used:
+    title        shown as the page title
+    description  shown under the title
+    label        small label above the title (default: Writing)
+    type         optional, shown in the details strip
+    status       optional, shown in the details strip
+  Date and reading time are worked out automatically.
+
+  Writing a post: do NOT start with a "# Title" line, because the layout
+  already shows the title. Use "## Heading" for each section. Every "##"
+  section becomes a numbered row. A section called "Limitations" is tinted.
+  To turn a link into a button, add {: .button} straight after it.
+{% endcomment %}
+
+{% assign word_count = content | strip_html | number_of_words %}
+{% assign reading_minutes = word_count | divided_by: 200.0 | ceil %}
+{% if reading_minutes < 1 %}{% assign reading_minutes = 1 %}{% endif %}
+
+{% assign meta_count = 2 %}
+{% if page.type %}{% assign meta_count = meta_count | plus: 1 %}{% endif %}
+{% if page.status %}{% assign meta_count = meta_count | plus: 1 %}{% endif %}
+
+<header class="page-header">
+  <p class="page-header__label">{{ page.label | default: "Writing" }}</p>
+  <h1 class="page-header__title">{{ page.title }}</h1>
+  {% if page.description %}
+    <p class="page-header__intro">{{ page.description }}</p>
+  {% endif %}
+</header>
+
+<dl class="note-meta" style="--meta-count: {{ meta_count }}">
+  <div class="note-meta__item">
+    <dt>Date</dt>
+    <dd><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time></dd>
+  </div>
+  {% if page.type %}
+    <div class="note-meta__item">
+      <dt>Type</dt>
+      <dd>{{ page.type }}</dd>
+    </div>
+  {% endif %}
+  {% if page.status %}
+    <div class="note-meta__item">
+      <dt>Status</dt>
+      <dd>{{ page.status }}</dd>
+    </div>
+  {% endif %}
+  <div class="note-meta__item">
+    <dt>Reading time</dt>
+    <dd>{{ reading_minutes }} min</dd>
+  </div>
+</dl>
+
+{% comment %}
+  Split the finished page at each "## Heading" so every section can sit in its own row.
+  parts[0] is anything written before the first heading.
+{% endcomment %}
+{% assign parts = content | split: '<h2' %}
+
+<div class="note-body">
+  {% assign intro = parts[0] | strip %}
+  {% if intro.size > 0 %}
+    <div class="note-intro">{{ intro }}</div>
+  {% endif %}
+
+  {% for part in parts offset: 1 %}
+    {% assign halves = part | split: '</h2>' %}
+    {% assign heading_text = '<h2' | append: halves[0] | append: '</h2>' | strip_html | strip %}
+    {% assign id_bits = halves[0] | split: '"' %}
+    {% assign section_body = part | remove_first: halves[0] | remove_first: '</h2>' %}
+
+    <section class="note-section{% if heading_text == 'Limitations' %} note-section--tinted{% endif %}"{% if id_bits.size > 1 %} id="{{ id_bits[1] }}"{% endif %}>
+      <div class="note-section__head">
+        <p class="note-section__number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</p>
+        <h2 class="note-section__title">{{ heading_text }}</h2>
+      </div>
+      <div class="note-section__body">
+        {{ section_body }}
+      </div>
+    </section>
+  {% endfor %}
+</div>
+
+<p class="note-back"><a href="{{ '/writing/' | relative_url }}">← All writing</a></p>

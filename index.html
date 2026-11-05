@@ -3,53 +3,31 @@ layout: default
 title: Home
 ---
 
-<section class="intro">
-  <p class="intro__label">independent lab notebook</p>
-  <h1 class="intro__statement">I explore all things human</h1>
+<section class="hero" aria-labelledby="hero-title">
+  <p class="hero__label">Independent behavioural science lab</p>
+  <h1 class="hero__title" id="hero-title">I explore all things human.</h1>
+  <p class="hero__text">Psychology, cognition, and the ways artificial intelligence changes how we think, learn, and decide.</p>
+  <a class="hero__link" href="{{ '/research/' | relative_url }}">Explore my research <span class="hero__arrow" aria-hidden="true">→</span></a>
 </section>
 
-<section class="selected-work" aria-labelledby="selected-work-heading">
-  <h2 class="selected-work__heading" id="selected-work-heading">Selected Work</h2>
+<section class="section" aria-labelledby="selected-research-heading">
+  <h2 class="section__heading" id="selected-research-heading">Selected research</h2>
 
-  <article class="project">
-    <p class="project__meta">
-      <span class="project__type">Experiment</span>
-      <span class="project__separator" aria-hidden="true">·</span>
-      <span class="project__status">Ongoing</span>
-    </p>
-    <h3 class="project__title">Does AI Change What We Think We Know?</h3>
-    <p class="project__description">A behavioural science experiment exploring whether using AI changes how certain people feel about what they know.</p>
-  </article>
-</section>
+  <div class="card-grid">
+    {% include research-card.html
+       url="/experiments/does-ai-change-what-we-think-we-know/"
+       label="01 / Ongoing study"
+       title="Does AI Change What We Think We Know?"
+       description="Investigating how AI affects confidence and metacognitive accuracy."
+       image="/assets/images/brain-network.svg"
+       alt="Glowing purple neural network in the shape of a brain, on a black background" %}
 
-<section class="contact" id="contact" aria-labelledby="contact-heading">
-  <h2 class="contact__heading" id="contact-heading">Contact</h2>
-
-  <!-- Messages are sent to Formspree, which forwards them to the email address set up in the Formspree dashboard. -->
-  <form class="contact-form" action="https://formspree.io/f/xaeqqbgr" method="POST">
-    <p class="contact-form__field">
-      <label class="contact-form__label" for="contact-name">Name</label>
-      <input class="contact-form__input" type="text" id="contact-name" name="name" autocomplete="name" required>
-    </p>
-
-    <p class="contact-form__field">
-      <label class="contact-form__label" for="contact-email">Email</label>
-      <input class="contact-form__input" type="email" id="contact-email" name="email" autocomplete="email" required>
-    </p>
-
-    <p class="contact-form__field">
-      <label class="contact-form__label" for="contact-message">Message</label>
-      <textarea class="contact-form__input contact-form__textarea" id="contact-message" name="message" rows="5" required></textarea>
-    </p>
-
-    <button class="contact-form__button" type="submit">Send →</button>
-  </form>
-
-  <!-- To add a final URL later, replace the "#" in that link's href. -->
-  <ul class="social-links">
-    <li class="social-links__item"><a class="social-links__link" href="#">LinkedIn</a></li>
-    <li class="social-links__item"><a class="social-links__link" href="#">Instagram</a></li>
-    <li class="social-links__item"><a class="social-links__link" href="#">TikTok</a></li>
-    <li class="social-links__item"><a class="social-links__link" href="https://github.com/veronjp" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-  </ul>
+    {% include research-card.html
+       url="/experiments/metacognitive-accuracy/"
+       label="02 / Interactive demo"
+       title="Metacognitive Accuracy"
+       description="Explore how accurately people estimate their performance."
+       image="/assets/images/cognitive-dots.svg"
+       alt="Abstract pattern of orange, grey, and lavender dots forming a circle" %}
+  </div>
 </section>

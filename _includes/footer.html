@@ -1,3 +1,21 @@
-<footer>
-  <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}</p>
+{% comment %}
+  Compact contact footer. The contact form lives on /contact/.
+  Social links come from _data/social.yml and only appear when a url is set.
+{% endcomment %}
+<footer class="site-footer">
+  <div class="site-footer__contact">
+    <p class="site-footer__title">Get in touch</p>
+    <p class="site-footer__text">Questions, ideas, or collaboration? <a href="{{ '/contact/' | relative_url }}">Send a message</a>.</p>
+  </div>
+
+  <ul class="social-links" aria-label="Social links">
+    {% for link in site.data.social %}
+      {% assign link_url = link.url | strip %}
+      {% if link_url.size > 0 %}
+        <li class="social-links__item"><a class="social-links__link" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.name }}<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <p class="site-footer__legal">&copy; {{ 'now' | date: "%Y" }} {{ site.title }}</p>
 </footer>
